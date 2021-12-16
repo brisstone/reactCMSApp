@@ -507,14 +507,18 @@ const fileSelectorHandler = async(e) =>{
       
      
       if(startYear.length < 4){
+        setErrorType(false)
           setIsOpen(true)
         setMessage("Start Year Length is less than 4")
       }else if(!degree){
+        setErrorType(false)
         setIsOpen(true)
         setMessage("Select Degree")
       }else if(collectCourseList.length === 0){
+        setErrorType(false)
         setMessage("Select Courses")
       }else if(extraCourseList.length === 0){
+        setErrorType(false)
         setMessage("Select Additional Courses")
       }else
       {
@@ -549,10 +553,12 @@ const fileSelectorHandler = async(e) =>{
           setErrorType(false);
           console.log(error);
           if (error.status === 401){
+            setErrorType(false)
             setIsOpen(true)
             setMessage(error.response.data.message);
           } 
           else {
+            setErrorType(false)
             setIsOpen(true)
             setMessage("SOMETHING WENT WRONG");
           }
