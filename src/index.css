@@ -16,6 +16,10 @@ code {
   padding: 20px;
 }
 
+.App{
+  padding: 3rem;
+  background-color: red;
+}
 .header {
   padding: 10px;
   background: #edf2f4;
@@ -108,4 +112,31 @@ input[type=textarea]{
 
 .successMsg{
   color: green;
+}
+
+.primary{
+  background-color: green;
+  color: white;
+  margin-left: 1rem;
+  
+  margin-top: 15px;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 5px 15px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  border: none;
+  color: #fff;
+ transition: all 0.25s ease;
+ margin-bottom: 3rem;
+}
+
+.primary:hover{
+  background-color: chartreuse;
+}
+
+
+.Editor{
+border: 2px solid black;
+
 }

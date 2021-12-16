@@ -176,9 +176,9 @@ const allCourses = ["Biology1", "Biology2", "Biology3", "Physics1", "Physics2", 
   var color;
   //Modal color
   if(errorType){
-    color = "red"
-  }else{
     color = "green"
+  }else{
+    color = "red"
   }
 
 
@@ -548,9 +548,14 @@ const fileSelectorHandler = async(e) =>{
           setLoading(false);
           setErrorType(false);
           console.log(error);
-          if (error.status === 401) setMessage(error.response.data.message);
-          else setMessage("SOMETHING WENT WRONG");
-          
+          if (error.status === 401){
+            setIsOpen(true)
+            setMessage(error.response.data.message);
+          } 
+          else {
+            setIsOpen(true)
+            setMessage("SOMETHING WENT WRONG");
+          }
         });
 
       }
@@ -722,7 +727,7 @@ const fileSelectorHandler = async(e) =>{
            </div>
          </div>
 
-         <div >
+         <div className='Editor'>
              <label >Teacher's REmark</label>
              <Editor
             // editorState={editorState}
