@@ -263,9 +263,8 @@ const allCourses = ["Biology1", "Biology2", "Biology3", "Physics1", "Physics2", 
   const handleStartyearOnChange = (e)=>{
     var value = e.target.value
     
-    //make the editor and image selection empty to catch error of not being filled
+    //inserted to make the editor and image selection empty & prevent catch error of not been filled
     setEditorState("empty")
-    
     setSelectedFile({ ...selectedFile, myFile: "empty,empty"});
 
     
@@ -514,7 +513,7 @@ const fileSelectorHandler = async(e) =>{
         setErrorType(false)
         setIsOpen(true)
         setMessage("Select Degree")
-      }else if(collectCourseList.length === 0){
+      }else if(minorfieldvalue.length === 0){
         setErrorType(false)
         setMessage("Select Courses")
       }else if(extraCourseList.length === 0){
@@ -548,6 +547,7 @@ const fileSelectorHandler = async(e) =>{
             }
             
           
+           
         }).catch(error => {
           setLoading(false);
           setErrorType(false);
