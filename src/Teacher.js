@@ -579,7 +579,7 @@ const fileSelectorHandler = async(e) =>{
 
   console.log(errorType)
   return (
-    <div>
+    <div className='teacher'>
       {/* {user.name}! */}
       Welcome Teacher: {user} <br /><br />
       
