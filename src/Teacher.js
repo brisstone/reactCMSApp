@@ -539,9 +539,11 @@ const fileSelectorHandler = async(e) =>{
             }else if(response.data[0].SUCCESS === "SUCCESS"){
               
               setErrorType(true)
+              setIsOpen(true)
               setMessage("SUCCESS")
              
             }else{
+              setIsOpen(true)
               setErrorType(false);
               setMessage("ERROR IN STORING")
             }
