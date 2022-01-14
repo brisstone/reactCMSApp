@@ -182,6 +182,12 @@ const allCourses = ["Biology1", "Biology2", "Biology3", "Physics1", "Physics2", 
   }
 
 
+  const handleViewStudentS = () =>{
+
+    props.history.push('/student-records')
+
+  }
+
     
 
   // handle click event of logout button
@@ -418,7 +424,7 @@ const fileSelectorHandler = async(e) =>{
 
   const handleOnChange = useCallback((e) => {
 
-   
+   console.log(e.target.checked)
     var value = e.target.value
     // var checkboxchecked = e.target.checked
     
@@ -524,7 +530,7 @@ const fileSelectorHandler = async(e) =>{
 
         // https://pythocmsapi.herokuapp.com
 
-      axios.post('https://pythocmsapi.herokuapp.com/admregister', {Adm: "", email: email, FullName: fullname,Password: password, DateOfBirth: dateOfBirth, SchoolStartYear: startYear, MajorFieldOfStudy: majorfieldvalue, MinorFieldOfStudy: minorfieldvalue, Courses: selectedCourse, AdCourses: extraCourseList, Suspended: suspended, Degree: degree, Remark: editorState, Picture: selectedFile, Comments: comment }).then(response => {
+      axios.post('http://localhost:8000/admregister', {Adm: "", email: email, FullName: fullname,Password: password, DateOfBirth: dateOfBirth, SchoolStartYear: startYear, MajorFieldOfStudy: majorfieldvalue, MinorFieldOfStudy: minorfieldvalue, Courses: selectedCourse, AdCourses: extraCourseList, Suspended: suspended, Degree: degree, Remark: editorState, Picture: selectedFile, Comments: comment }).then(response => {
             setLoading(false);
             console.log(response)
             console.log(response.data[0].EmailAlreadyExist)
@@ -586,6 +592,7 @@ const fileSelectorHandler = async(e) =>{
       {console.log(user)}
 
       <input type="button" className='removeBtn' onClick={handleLogout} value="Logout" />
+      <input type="button" className='removeBtn' onClick={handleViewStudentS} value="View Student Records" />
 
       <div className="errorMsg">
         <div style={{color: "red"}}> {error}</div>

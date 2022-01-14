@@ -34,7 +34,7 @@ function Login(props) {
       // "proxy": "https://pythocmsapi.herokuapp.com/",
 
 
-    await axios.post("https://pythocmsapi.herokuapp.com/login", { email: username.value, password: password.value }).then(response => {
+    await axios.post("http://localhost:8000/login", { email: username.value, password: password.value }).then(response => {
       setLoading(false);
       
       console.log(response.data[0].IncorrectPassword)
@@ -59,7 +59,8 @@ function Login(props) {
           props.history.push('/student');
           console.log(" student");
       }
-
+     
+     
       }
       
       return isMounted= false

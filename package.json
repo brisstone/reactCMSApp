@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "12.18.2"
+    "node": "12.18.2",
+    "proxy": "http://localhost:8000"
+    
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^31.0.0",

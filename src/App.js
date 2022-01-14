@@ -11,6 +11,7 @@ import PublicRoute from './Utils/PublicRoute';
 import { getToken, removeUserSession, setUserSession } from './Utils/Common';
 import register from './Register';
 import Student from './Student';
+import StudentRecords from './Pages/StudentRecords';
 
 function App() {
   const [authLoading, setAuthLoading] = useState(true);
@@ -51,6 +52,7 @@ function App() {
               <Route path="/student" component={Student} />
               <PublicRoute path="/register" component={register} />
               <PrivateRoute path="/teacher" component={Teacher} />
+              <PrivateRoute path="/student-records" component={StudentRecords} />
               {/* <PrivateRoute path="/student" component={Student} /> */}
             </Switch>
           </div>
