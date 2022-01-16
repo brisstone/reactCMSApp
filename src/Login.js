@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { setUserSession } from './Utils/Common';
+import { GET_USER } from './redux/constants';
 // import EditorConvertToText from './components/EditorConvertToText';
 // import MyEditor from './components/Editor';
 
@@ -27,7 +28,13 @@ function Login(props) {
   
 
 
-  const handleLogin = async () => {
+  const handleLogin = async (dispatch) => {
+
+    // dispatch({
+    //   type: GET_USER,
+    //   payload: username
+    // });
+    
     setError(null);
     setLoading(true);
     let isMounted = true; 
@@ -54,9 +61,14 @@ function Login(props) {
         console.log(response.data[2].Info.split(", ")[1].replace(/^'(.*)'$/, '$1'))
         // console.log(response.data[2].Info[1])
         if(response.data[0].Adm == 1){
-            props.history.push('/teacher');
+          console.log(username, 'jjjjjjjj')
+         
+
+            props.history.push(`/teacher/${username.value}`);
         }else{
-          props.history.push('/student');
+
+          
+          props.history.push(`/student/${username.value}`);
           console.log(" student");
       }
      

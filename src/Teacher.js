@@ -78,6 +78,10 @@ export default function Teacher(props) {
   const [isOpen, setIsOpen] = useState(false);
 
 
+
+  const [sudoemail, setsudoEmail] = useState('')
+
+
   
   
 
@@ -182,9 +186,17 @@ const allCourses = ["Biology1", "Biology2", "Biology3", "Physics1", "Physics2", 
   }
 
 
+  useEffect(() => {
+
+    
+    setsudoEmail(props.match.params.email)
+  
+  }, [])
+
+
   const handleViewStudentS = () =>{
 
-    props.history.push('/student-records')
+    props.history.push(`/student-records/${sudoemail}`)
 
   }
 

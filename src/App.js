@@ -10,7 +10,7 @@ import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
 import { getToken, removeUserSession, setUserSession } from './Utils/Common';
 import register from './Register';
-import Student from './Student';
+import Student from './Pages/Student';
 import StudentRecords from './Pages/StudentRecords';
 
 function App() {
@@ -49,10 +49,10 @@ function App() {
             <Switch>
               <Route exact path="/" component={Login} />
               <PublicRoute path="/login" component={Login} />
-              <Route path="/student" component={Student} />
+              <Route path="/student/:email" component={Student} />
               <PublicRoute path="/register" component={register} />
-              <PrivateRoute path="/teacher" component={Teacher} />
-              <PrivateRoute path="/student-records" component={StudentRecords} />
+              <PrivateRoute path="/teacher/:email" component={Teacher} />
+              <PrivateRoute path="/student-records/:email" component={StudentRecords} />
               {/* <PrivateRoute path="/student" component={Student} /> */}
             </Switch>
           </div>
