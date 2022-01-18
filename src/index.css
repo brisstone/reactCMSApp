@@ -145,3 +145,110 @@ border: 2px solid black;
  padding-top: 5rem 2rem;
 
 }
+
+.borderInput{
+  border: none;
+
+}
+
+
+.student-record{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: 'red';
+}
+
+.styled-table {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center; */
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+background-color: 'red';
+}
+
+
+.styled-table thead tr {
+  background-color: #dc3545;
+  color: #ffffff;
+  text-align: left;
+}
+
+
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #dc3545;
+}
+
+
+.styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #dc3545;
+}
+
+
+.log-out{
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2rem;
+  /* background-color: blue; */
+  color: white;
+ 
+}
+
+.log-out-btn{
+  background-color: #dc3545;
+  color: white;
+  padding: 0rem 1rem;
+  font-size: 1rem;
+  font-weight: 900;
+  
+}
+
+
+.log-out-btn:hover{
+  background-color: #cc6e78(85, 134, 240);
+  color: black;
+  /* padding: 0rem 1rem;
+  font-size: 1rem;
+  font-weight: 900; */
+  
+}
+
+.logout{
+text-decoration: none;
+color: #dddddd;
+
+}
+
+
+.save{
+ background-color: 'green';
+}
+
+
+.cancel{
+  background-color: 'red';
+}
+
+
+

@@ -5,6 +5,10 @@ import axios from 'axios';
 import { setUserSession } from './Utils/Common';
 
 export default function Register(props) {
+
+
+  const baseUrl = 'http://localhost:8000'
+
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -23,8 +27,9 @@ export default function Register(props) {
 		  setError('Password and confirm password are not match');
 		} else {
                    //   dispatch(register(name, email, password));\
-        axios.post('https://pythocmsapi.herokuapp.com/register', { email: email, password: password}).then(response => {
-            setLoading(false);
+        axios.post(`${baseUrl}/register`, { email: email, password: password}).then(response => {
+            
+          setLoading(false);
             setUserSession(response.token, response.email);
             props.history.push('/login');
             // if(response.token){

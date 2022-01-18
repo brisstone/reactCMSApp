@@ -7,6 +7,10 @@ import { GET_USER } from './redux/constants';
 
 
 function Login(props) {
+
+
+  const baseUrl = 'http://localhost:8000'
+
   const [loading, setLoading] = useState(false);
   const username = useFormInput('');
   const password = useFormInput('');
@@ -41,7 +45,7 @@ function Login(props) {
       // "proxy": "https://pythocmsapi.herokuapp.com/",
 
 
-    await axios.post("http://localhost:8000/login", { email: username.value, password: password.value }).then(response => {
+    await axios.post(`${baseUrl}/login`, { email: username.value, password: password.value }).then(response => {
       setLoading(false);
       
       console.log(response.data[0].IncorrectPassword)
@@ -57,18 +61,20 @@ function Login(props) {
         console.log('ppp')
       }else{
           setUserSession(response.data[2].Info.split(", ")[1].replace(/^'(.*)'$/, '$1'));
-        console.log(response.data[2].Info)
-        console.log(response.data[2].Info.split(", ")[1].replace(/^'(.*)'$/, '$1'))
+        console.log(response.data[2].Info.split(", "), 'iiiiiiii')
+        console.log(response.data[2].Info.split(", ")[1], 'iiiiiiii')
+        //remove approstrophe using regex
+        console.log(response.data[2].Info.split(", ")[1].replace(/^'(.*)'$/, '$1'), 'uuuuuuu')
         // console.log(response.data[2].Info[1])
         if(response.data[0].Adm == 1){
           console.log(username, 'jjjjjjjj')
          
 
-            props.history.push(`/teacher/${username.value}`);
+            props.history.push(`/teacher`);
         }else{
 
           
-          props.history.push(`/student/${username.value}`);
+          props.history.push(`/student`);
           console.log(" student");
       }
      

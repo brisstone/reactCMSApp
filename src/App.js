@@ -49,10 +49,10 @@ function App() {
             <Switch>
               <Route exact path="/" component={Login} />
               <PublicRoute path="/login" component={Login} />
-              <Route path="/student/:email" component={Student} />
+              <Route path="/student" component={Student} />
               <PublicRoute path="/register" component={register} />
-              <PrivateRoute path="/teacher/:email" component={Teacher} />
-              <PrivateRoute path="/student-records/:email" component={StudentRecords} />
+              <PrivateRoute path="/teacher" component={Teacher} />
+              <PrivateRoute path="/student-records" component={StudentRecords} />
               {/* <PrivateRoute path="/student" component={Student} /> */}
             </Switch>
           </div>

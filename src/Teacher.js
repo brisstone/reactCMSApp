@@ -36,6 +36,10 @@ const cryptr = new Cryptr('myTotalySecretKey');
 
 
 export default function Teacher(props) {
+
+  const baseUrl = 'http://localhost:8000'
+
+
   const user = getUser();
 
 
@@ -196,7 +200,7 @@ const allCourses = ["Biology1", "Biology2", "Biology3", "Physics1", "Physics2", 
 
   const handleViewStudentS = () =>{
 
-    props.history.push(`/student-records/${sudoemail}`)
+    props.history.push(`/student-records`)
 
   }
 
@@ -542,7 +546,7 @@ const fileSelectorHandler = async(e) =>{
 
         // https://pythocmsapi.herokuapp.com
 
-      axios.post('http://localhost:8000/admregister', {Adm: "", email: email, FullName: fullname,Password: password, DateOfBirth: dateOfBirth, SchoolStartYear: startYear, MajorFieldOfStudy: majorfieldvalue, MinorFieldOfStudy: minorfieldvalue, Courses: selectedCourse, AdCourses: extraCourseList, Suspended: suspended, Degree: degree, Remark: editorState, Picture: selectedFile, Comments: comment }).then(response => {
+      axios.post(`${baseUrl}/admregister`, {Adm: "", email: email, FullName: fullname,Password: password, DateOfBirth: dateOfBirth, SchoolStartYear: startYear, MajorFieldOfStudy: majorfieldvalue, MinorFieldOfStudy: minorfieldvalue, Courses: selectedCourse, AdCourses: extraCourseList, Suspended: suspended, Degree: degree, Remark: editorState, Picture: selectedFile, Comments: comment }).then(response => {
             setLoading(false);
             console.log(response)
             console.log(response.data[0].EmailAlreadyExist)
