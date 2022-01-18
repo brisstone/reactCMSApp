@@ -37,7 +37,8 @@ const cryptr = new Cryptr('myTotalySecretKey');
 
 export default function Teacher(props) {
 
-  const baseUrl = 'http://localhost:8000'
+  // const baseUrl = 'http://localhost:8000'
+  const baseUrl = 'https://pythocmsapi.herokuapp.com'
 
 
   const user = getUser();

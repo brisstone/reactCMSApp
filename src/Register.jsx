@@ -7,7 +7,8 @@ import { setUserSession } from './Utils/Common';
 export default function Register(props) {
 
 
-  const baseUrl = 'http://localhost:8000'
+  // const baseUrl = 'http://localhost:8000'
+  const baseUrl = 'https://pythocmsapi.herokuapp.com'
 
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState('');

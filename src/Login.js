@@ -9,7 +9,8 @@ import { GET_USER } from './redux/constants';
 function Login(props) {
 
 
-  const baseUrl = 'http://localhost:8000'
+  // const baseUrl = 'http://localhost:8000'
+  const baseUrl = 'https://pythocmsapi.herokuapp.com'
 
   const [loading, setLoading] = useState(false);
   const username = useFormInput('');

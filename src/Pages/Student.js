@@ -10,7 +10,8 @@ import { getUser, removeUserSession } from '../Utils/Common';
 
 export default function Student(props) {
 
-  const baseUrl = 'http://localhost:8000'
+  // const baseUrl = 'http://localhost:8000'
+  const baseUrl = 'https://pythocmsapi.herokuapp.com'
 
   // const [sudoemail, setsudoEmail] = useState('')
   const [data, setData] = useState([])
