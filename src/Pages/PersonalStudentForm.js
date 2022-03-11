@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
-import { getUser, removeUserSession } from "./Utils/Common";
+import { getUser, removeUserSession } from "../Utils/Common";
 import axios from "axios";
 import {
   EditorState,
@@ -15,16 +15,17 @@ import {
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "draft-js/dist/Draft.css";
-import "../node_modules/draft-js/dist/Draft.css";
-import "../src/components/richeditor.css";
+import "../../node_modules/draft-js/dist/Draft.css";
+import "../../src/components/richeditor.css";
 
 // import 'draft-js/dist/Draft.css';
 // import '../node_modules/draft-js/dist/Draft.css'
 
-import "./index.css";
+import "../index.css";
 import { Base64 } from "js-base64";
 import Countdown from "antd/lib/statistic/Countdown";
-import Modal from "./components/modal/Modal";
+import Modal from "../components/modal/Modal";
+import BackButton from "../components/Button/BackButton";
 
 // import Base64 from 'crypto-js/enc-base64';
 var CryptoJS = require("crypto-js");
@@ -34,7 +35,7 @@ var SHA256 = require("crypto-js/sha256");
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
 
-export default function Teacher(props) {
+export default function PersonalStudentForm(props) {
   // const baseUrl = 'http://localhost:8000'
   const baseUrl = "https://pythocmsapi.herokuapp.com";
 
@@ -50,7 +51,7 @@ export default function Teacher(props) {
 
   // determines if a file has been picked or not
   const [isSelected, setIsSelected] = useState(false);
-  const [majorfieldvalue, setMajorfieldvalue] = useState("Science");
+  const [majorfieldvalue, setMajorfieldvalue] = useState("");
   const [minorfieldvalue, setMinorfieldvalue] = useState("");
   const [courseList, setCourseList] = useState([]);
   const [extraCourseList, setExtraCourseList] = useState([]);
@@ -79,6 +80,47 @@ export default function Teacher(props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [sudoemail, setsudoEmail] = useState("");
+  const [student, setstudent] = useState();
+  const [teacherEmail, setTeacherEmail] = useState("");
+
+  useEffect(() => {
+    // setsudoEmail(props.match.params.email)
+    // props.location.state;
+    setstudent(props.location.student);
+    setStartYear(student && student.SchoolStartYear);
+    setComment(student && student.Comments);
+    setMinorfieldvalue(student && student.MinorFieldOfStudy);
+    setMajorfieldvalue(student && student.MajorFieldOfStudy);
+
+    if (student && student.Suspended == 1) {
+      setSuspended(true);
+    } else {
+      setSuspended(false);
+    }
+    // console.log(sudoemail, 'jjjjjj')
+    // email = sessionStorage.getItem("token") || null;
+    // getStudentRecords(email);
+    // console.log(email, "kkstttttttttt");
+    // setTeacherEmail(email);
+    // console.log(teacherEmail, "rrrrrrrrrrrrrrrrrooooooooooooooorrrrrrrrrrro");
+  }, [student]);
+
+  console.log(
+    student,
+    minorfieldvalue,
+    student && student.MinorFieldOfStudy,
+    "kkkkkkkkj"
+  );
+
+  useEffect(() => {
+    // setsudoEmail(props.match.params.email)
+    // console.log(sudoemail, 'jjjjjj')
+    var emailp = sessionStorage.getItem("token") || null;
+    // getStudentRecords(email);
+    // console.log(email, "kkstttttttttt");
+    setTeacherEmail(emailp);
+    console.log(teacherEmail, "rrrrrrrrrrrrrrrrrooooooooooooooorrrrrrrrrrro");
+  }, [teacherEmail]);
 
   var Stor = false;
   const html = '<p id="para">asdfsd</p>';
@@ -197,7 +239,7 @@ export default function Teacher(props) {
   const handleViewStudentS = () => {
     // props.history.push(`/student-records`)
 
-    props.history.push(`/all-students-record`);
+    props.history.push(`/all-students-record;`);
   };
 
   // handle click event of logout button
@@ -285,6 +327,14 @@ export default function Teacher(props) {
   };
 
   var newallCourses;
+
+  useEffect(() => {
+    newallCourses = student && student.Courses;
+    //  console.log()
+    console.log(newallCourses, student && student.Courses, "kiiiiiiiuu");
+  }, [student]);
+
+  console.log(newallCourses, "kkjkuuiuiu");
   const allcoursesField = useCallback(
     (e) => {
       console.log(type2);
@@ -377,18 +427,18 @@ export default function Teacher(props) {
   //convert file upload to base64
   const convertToBase64 = (file) => {
     console.log(file, "djjddj");
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
+    // return new Promise((resolve, reject) => {
+    //   const fileReader = new FileReader();
+    //   fileReader.readAsDataURL(file);
+    //   fileReader.onload = () => {
+    //     resolve(fileReader.result);
+    //   };
+    //   fileReader.onerror = (error) => {
+    //     reject(error);
+    //   };
+    // });
 
-    // return btoa(file);
+    return btoa(file);
   };
 
   const fileSelectorHandler = async (e) => {
@@ -467,7 +517,7 @@ export default function Teacher(props) {
     },
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
     console.log(degree);
@@ -480,15 +530,15 @@ export default function Teacher(props) {
     );
     console.log(selectedCourse, "mdddd");
 
-    if (startYear.length < 4) {
-      setErrorType(false);
-      setIsOpen(true);
-      setMessage("Start Year Length is less than 4");
-    } else if (!degree) {
-      setErrorType(false);
-      setIsOpen(true);
-      setMessage("Select Degree");
-    } else if (minorfieldvalue.length === 0) {
+    // if (startYear.length < 4) {
+    //   setErrorType(false);
+    //   setIsOpen(true);
+    //   setMessage("Start Year Length is less than 4");
+    // } else if (!degree) {
+    //   setErrorType(false);
+    //   setIsOpen(true);
+    //   setMessage("Select Degree");
+    if (minorfieldvalue.length === 0) {
       setErrorType(false);
       setMessage("Select Courses");
     } else if (extraCourseList.length === 0) {
@@ -497,60 +547,37 @@ export default function Teacher(props) {
     } else {
       // https://pythocmsapi.herokuapp.com
 
-      axios
-        .post(`${baseUrl}/admregister`, {
-          Adm: "",
-          email: email,
-          FullName: fullname,
-          Password: password,
-          DateOfBirth: dateOfBirth,
-          SchoolStartYear: startYear,
-          MajorFieldOfStudy: majorfieldvalue,
-          MinorFieldOfStudy: minorfieldvalue,
-          Courses: selectedCourse,
-          AdCourses: extraCourseList,
-          Suspended: suspended,
-          Degree: degree,
-          Remark: editorState,
-          Picture: selectedFile,
-          Comments: comment,
-        })
-        .then((response) => {
-          setLoading(false);
-          console.log(response);
-          console.log(response.data[0].EmailAlreadyExist);
-          // var reply = response.data;
-          // var jsonData = JSON.parse(JSON.stringify(response));
-          // console.log(jsonData)
-          // console.log(typeof(jsonData.data))
-          if (response.data[0].EmailAlreadyExist === "Email Already Exists") {
-            setErrorType(false);
+      const editedStudentUI = {
+        id: student.id,
+        Email: student.Email,
+        FullName: fullname || student.FullName,
+        DateOfBirth: dateOfBirth || student.DateOfBirth,
+        MajorFieldOfStudy: majorfieldvalue || student.MajorFieldOfStudy,
+        MinorFieldOfStudy: minorfieldvalue || student.MinorFieldOfStudy,
+        Courses: selectedCourse || student.selectedCourse,
+        AdCourses: extraCourseList || student.AdCourses,
+        Degree: degree || student.Degree,
+        SchoolStartYear: startYear || student.SchoolStartYear,
 
-            setMessage("EMAIL ALREADY EXISTS");
-          } else if (response.data[0].SUCCESS === "SUCCESS") {
-            setErrorType(true);
-            setIsOpen(true);
-            setMessage("SUCCESS");
-          } else {
-            setIsOpen(true);
-            setErrorType(false);
-            setMessage("ERROR IN STORING");
-          }
-        })
-        .catch((error) => {
-          setLoading(false);
-          setErrorType(false);
-          console.log(error);
-          if (error.status === 401) {
-            setErrorType(false);
-            setIsOpen(true);
-            setMessage(error.response.data.message);
-          } else {
-            setErrorType(false);
-            setIsOpen(true);
-            setMessage("SOMETHING WENT WRONG");
-          }
-        });
+        Suspended: suspended || student.Suspended,
+        Remark: editorState || student.Remark,
+        Picture: selectedFile || student.Picture,
+        Comments: comment || student.Comments,
+
+        admemail: teacherEmail,
+      };
+
+      try {
+        const data = await axios.post(
+          `${baseUrl}/updteadcourses`,
+          editedStudentUI
+        );
+        if (data.data[0].Success === "done") {
+          setMessage("Sucessfully Uploaded..");
+        }
+      } catch (err) {
+        console.log(err, "kssks");
+      }
     }
   };
 
@@ -564,20 +591,21 @@ export default function Teacher(props) {
   return (
     <div className="teacher">
       {/* {user.name}! */}
-      Welcome Teacher: {user} <br />
-      <br />
+      {/* Welcome Teacher: {user} <br />
+      <br /> */}
       {console.log(user)}
+      {/* <input
+        type="button"
+        className="removeBtn"
+        onClick={handleViewStudentS}
+        value="View Student Records"
+      /> */}
+      <BackButton />
       <input
         type="button"
         className="removeBtn"
         onClick={handleLogout}
         value="Logout"
-      />
-      <input
-        type="button"
-        className="removeBtn"
-        onClick={handleViewStudentS}
-        value="View Student Records"
       />
       <div className="errorMsg">
         <div style={{ color: "red" }}> {error}</div>
@@ -592,29 +620,50 @@ export default function Teacher(props) {
           </div>
         )}
       </div>
-      <div>Register Students</div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingRight: "20px",
+        }}
+      >
+        <div> {student ? `Welcome: ${student.FullName}` : ""}</div>{" "}
+        <div>
+          {" "}
+          <img
+            style={{ width: "80px", height: "80px" }}
+            src={student && `data:image/jpeg;base64,${student.Picture}`}
+          />
+        </div>
+      </div>
       <form className="form" onSubmit={submitHandler}>
         <div className="input-container">
           <label className="parameter"> Email</label>
           <input
             type="email"
+            value={student && student.Email}
             placeholder="email"
             onChange={handleEmailOnChange}
             required
+            readonly
           />
         </div>
-
         <div className="input-container">
           <label className="parameter"> Fullname</label>
           <input
             type="text"
+            value={student && student.FullName}
+            // value={student && student.FullName}
             placeholder="full-name"
             onChange={handleFullnameOnChange}
             required
+            readonly
+            // readonly="readonly"
           />
+          {/* <input /> */}
         </div>
-
-        <div>
+        {/* <div>
           <label className="parameter">Password</label>
           <input
             type="password"
@@ -622,35 +671,68 @@ export default function Teacher(props) {
             onChange={handlePasswordOnChange}
             required
           />
-        </div>
-
+        </div> */}
         <div className="input-container">
           <label className="parameter">Date of birth</label>
-          <input
-            type="date"
+          {student && student.DateOfBirth}
+          {/* <input
+            // type="date"
             id="birthday"
             name="birthday"
+            value={student && student.DateOfBirth}
             onChange={handleDateofbirthOnChange}
             required
-          />
+            readonly
+          /> */}
         </div>
-
         <div className="input-container">
           <label className="parameter">School Start Year</label>
           <input
             maxLength="4"
             type="text"
-            value={startYear}
+            value={student && student.SchoolStartYear}
             placeholder="School Start"
             onChange={handleStartyearOnChange}
             required
+            readonly
+          />
+        </div>
+        <div className="input-container">
+          <label className="parameter">School Start Year:</label>
+          <input
+            maxLength="4"
+            type="text"
+            value={student && student.Degree}
+            placeholder="School Start"
+            // onChange={handleStartyearOnChange}
+            required
+            readonly
           />
         </div>
 
-        <div className="input-container">
-          <fieldset onChange={handleRadioOnChange} required>
+        {/* <img src={atob(student && student.Picture)} /> */}
+
+        {/* <img
+          src={
+            student &&
+            `data:image/png;base64,${Buffer.from(
+              student.Picture,
+              "base64"
+            ).toString()}`
+          }
+        /> */}
+        {/* myImage.src = URL.createObjectURL(blob); */}
+        {/* <img src={atob("W29iamVjdCBGaWxlXQ")} /> */}
+        {/* <div className="input-container">
+          <fieldset
+            value={student && student.Degree}
+            // value="BSc"
+            onChange={handleRadioOnChange}
+            required
+            readonly
+          >
             <legend className="parameter">Degree</legend>
-            {/* common name attribute */}
+       
             <label className="degreechk">
               <input name="degree" type="radio" value="BA" />
               BA
@@ -664,16 +746,30 @@ export default function Teacher(props) {
               PHD
             </label>
           </fieldset>
-        </div>
+        </div> */}
 
         <div className="input-container">
+          <label className="parameter">Major Field of Study:</label>
+          <input
+            maxLength="4"
+            type="text"
+            value={student && student.MajorFieldOfStudy}
+            placeholder="School Start"
+            // onChange={handleStartyearOnChange}
+            required
+            readonly
+          />
+        </div>
+
+        {/* <div className="input-container">
           <label className="parameter">Major Field of Study</label>
           <select
             onChange={majorFieldChangeHandler}
             value={majorfieldvalue}
             required
           >
-            {/* {console.log("fo", e)} */}
+       
+       
             <option value="Science" key="1">
               Science
             </option>
@@ -684,9 +780,20 @@ export default function Teacher(props) {
               Commercial
             </option>
           </select>
-        </div>
-
+        </div> */}
         <div className="input-container">
+          <label className="parameter">Minor Field of Study:</label>
+          <input
+            maxLength="4"
+            type="text"
+            value={student && student.MinorFieldOfStudy}
+            placeholder="School Start"
+            // onChange={handleStartyearOnChange}
+            required
+            readonly
+          />
+        </div>
+        {/* <div className="input-container">
           <label className="parameter">Minor Field of Study</label>
           <select
             onChange={handleMinorfieldOnChange}
@@ -696,11 +803,17 @@ export default function Teacher(props) {
             <option>select</option>
             {options}
           </select>
-        </div>
-
+        </div> */}
         <div className="showCourses">
           <div className="input-container">
-            <label className="parameter"> Course List</label>
+            {/* <label className="parameter"> Course List</label> */}
+
+            <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
+              <b>Current Courses:</b>
+              {console.log(student && student.Courses, "opop")}
+              {student && student.Courses.split(",").map((e) => <div>{e}</div>)}
+            </div>
+            {/*             
             {type2 ? (
               type2.map((el) => (
                 <div key={el}>
@@ -720,7 +833,7 @@ export default function Teacher(props) {
               ))
             ) : (
               <label>&nbsp;</label>
-            )}
+            )} */}
           </div>
 
           <div>
@@ -729,7 +842,16 @@ export default function Teacher(props) {
               <label> Other Courses</label>
             </div>
 
-            <select onChange={handleExtraCourseOnClick}>
+            <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
+              <b>Current Additional Courses:</b>
+              {student &&
+                student.AdCourses.split(",").map((e) => <div>{e}</div>)}
+            </div>
+
+            <select
+              onChange={handleExtraCourseOnClick}
+              value={student && student.AdCourses}
+            >
               <option value="" key="">
                 Select
               </option>
@@ -761,13 +883,16 @@ export default function Teacher(props) {
             </div>
           </div>
         </div>
-
-        <div className="input-container">
+        {/* <div className="input-container">
           <label className="parameter">Image</label>
-          <input type="file" onChange={fileSelectorHandler} />
+          <input
+            type="file"
+            onChange={fileSelectorHandler}
+            readonly
+            // value={student && student.Picture}
+          />
           {isSelected ? <p>Image selected</p> : <p>Image not yet selected</p>}
-        </div>
-
+        </div> */}
         {/* <div className="input-container">
            <label className="parameter" >Average Grade</label>
            <label>
@@ -775,36 +900,50 @@ export default function Teacher(props) {
              </label>
           
         </div> */}
-
         <div className="input-container">
           <label className="parameter">Suspended</label>
           <input
+            value={student && student.Suspended}
             type="checkbox"
             checked={suspended}
             onChange={handleSuspensionChange}
+            readonly
           />
         </div>
-
         <div className="input-container">
           <label className="parameter">Comment</label>
           <div>
             <textarea
               className="areaText"
-              value={comment}
+              value={student && student.Comment}
               onChange={handleCommentChange}
               placeholder="teachers' comment"
+              readonly
+            />
+          </div>
+        </div>
+        <div className="input-container">
+          <label className="parameter">Teacher's REmark</label>
+          <div>
+            <textarea
+              value={student && student.Remark}
+              className="areaText"
+              // value={comment}
+              // onChange={onEditorStateChange}
+              placeholder="teachers' Remark"
             />
           </div>
         </div>
 
-        <div className="Editor">
+        {/* <div className="Editor">
           <label>Teacher's REmark</label>
           <Editor
             // editorState={editorState}
+            value={student && student.Remark}
             onChange={onEditorStateChange}
+            readonly
           />
-        </div>
-
+        </div> */}
         <button className="primary" type="submit">
           Register
         </button>

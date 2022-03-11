@@ -208,10 +208,15 @@ background-color: 'red';
 
 .log-out{
   display: flex;
-  justify-content: flex-end;
-  margin-right: 2rem;
+  justify-content: space-between;
+  /* margin-right: 2rem; */
+  /* justify-content: center;  */
+  align-items: center;
+  /* background-color: red; */
+
   /* background-color: blue; */
   color: white;
+  width: 90%;
  
 }
 

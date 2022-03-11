@@ -207,85 +207,107 @@ const updateRecord = async(editedStudent)=>{
 console.log(data, 'iiiiiiiiiiiiiiiiiiiiiiiiii')
 
     return (
-        <div className='student-record'>
-          <div>Welcome Back {data && data.map(student=> <h4>{student.FullName}</h4> )}</div>
-            
-            <div className='log-out'> 
-              <input className='log-out-btn' type="button" onClick={handleLogout} value="Logout" />
-
-            </div>
-
-            <div>
-            <div > <h4 style={{Color: 'red', fontWeight: 'bold'}}>INPUT COURSES AND ADDITIONAL COURSES SEPARATED BY COMMA</h4> </div>
-            </div>
-            
-                <div>{message}</div>
-          <form onSubmit={handleEditFormSubmit}>
-            <CardBody>
-                <Card>
-                    <Row>
-
-                  <Table className='styled-table'>
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>FullName</th>
-                            <th>Date of Birth</th>
-                            <th>Major Field of Study</th>
-                            <th>Minor Field of Study</th>
-                            <th>Courses</th>
-                            <th>Additional Courses</th>
-                            <th>Degree</th>
-                            <th>Edit</th>
-                        </tr>
-                        
-                    </thead>
-                    <tbody>
-                      {console.log(data, 'jdjdjdjdjduud')}
-                        {data && data.map(student=>
-                
-                           
-                  <Fragment>
-                      {editStudentID === student.id ? (
-                        <EditableRow2
-                        key={1}
-                          editFormData={editFormData}
-                          handleEditFormChange={handleEditFormChange}
-                          handleCancelClick={handleCancelClick}
-                      
-                        />
-                      ) : (
-                        <ReadOnlyRow2
-                        key={2}
-                          student={student}
-                          handleEditClick={handleEditClick}
-                          // handleDeleteClick={handleDeleteClick}
-                        />
-                      )}
-                  </Fragment>
-                            
-                  
-                    )}
-                        
-
-                        
-
-
-                    </tbody>    
-
-                  </Table>
-
-
-
-
-                    </Row>
-
-
-                </Card>
-
-            </CardBody>
-          </form>
-           
+      <div className="student-record">
+        <div>
+          Welcome Back{" "}
+          {data && data.map((student) => <h4>{student.FullName}</h4>)}
         </div>
-    )
+
+        <div className="log-out">
+          <input
+            className="log-out-btn"
+            type="button"
+            onClick={handleLogout}
+            value="Logout"
+          />
+        </div>
+
+        <div>
+          <div>
+            {" "}
+            <h4 style={{ Color: "red", fontWeight: "bold" }}>
+              INPUT COURSES AND ADDITIONAL COURSES SEPARATED BY COMMA
+            </h4>{" "}
+          </div>
+        </div>
+
+        <div>{message}</div>
+        <form onSubmit={handleEditFormSubmit}>
+          <CardBody>
+            <Card>
+              <Row>
+                <Table
+                  className="styled-table"
+                  striped
+                  bordered
+                  hover
+                  size="sm"
+                >
+                  <thead>
+                    <tr className="active-row">
+                      <th>Email</th>
+                      <th>FullName</th>
+                      <th>Date of Birth</th>
+                      <th> Major Field of Study</th>
+                      <th>Minor Field of Study</th>
+                      <th>Courses</th>
+                      <th>Additional Courses</th>
+                      <th>Degree</th>
+                      <th>Edit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data &&
+                      data.map((student) => (
+                        <>
+                          <tr>
+                            <td>{student.Email}</td>
+
+                            <td>{student.FullName}</td>
+                            <td>{student.DateOfBirth}</td>
+                            <td>{student.MajorFieldOfStudy}</td>
+                            <td>{student.MinorFieldOfStudy}</td>
+                            <td>{student.Courses}</td>
+                            <td>{student.AdCourses}</td>
+                            <td>{student.Degree}</td>
+                            <td>
+                              <Button
+                                onClick={() =>
+                                  props.history.push({
+                                    pathname: "/personal-student-form",
+                                    student: student,
+                                  })
+                                }
+                              >
+                                Edit
+                              </Button>{" "}
+                            </td>
+                          </tr>
+                        </>
+                        // <Fragment>
+                        //   {editStudentID === student.id ? (
+                        //     <EditableRow
+                        //       key={1}
+                        //       editFormData={editFormData}
+                        //       handleEditFormChange={handleEditFormChange}
+                        //       handleCancelClick={handleCancelClick}
+                        //     />
+                        //   ) : (
+                        //     <ReadOnlyRow
+                        //       key={2}
+                        //       student={student}
+                        //       handleEditClick={handleEditClick}
+
+                        //     />
+                        //   )}
+                        // </Fragment>
+                      ))}
+                  </tbody>
+                </Table>
+              </Row>
+            </Card>
+          </CardBody>
+        </form>
+      </div>
+    );
 }

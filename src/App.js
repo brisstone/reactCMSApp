@@ -12,6 +12,9 @@ import { getToken, removeUserSession, setUserSession } from './Utils/Common';
 import register from './Register';
 import Student from './Pages/Student';
 import StudentRecords from './Pages/StudentRecords';
+import StudentForm from './Pages/StudentForm';
+import AllStudentsForm from './Pages/AllStudentsForm';
+import PersonalStudentForm from './Pages/PersonalStudentForm';
 
 function App() {
   const [authLoading, setAuthLoading] = useState(true);
@@ -40,7 +43,9 @@ function App() {
       <BrowserRouter>
         <div>
           <div className="header">
-            <NavLink exact activeClassName="active" to="/">Home</NavLink>
+            <NavLink exact activeClassName="active" to="/">
+              Home
+            </NavLink>
             {/* <NavLink activeClassName="active" to="/login">Login</NavLink><small>(Access without token only)</small>
             <NavLink activeClassName="active" to="/teacher">Teacher Dashboard</NavLink><small>(Access with token only)</small>
             <NavLink activeClassName="active" to="/register">Register</NavLink><small>(Access without token)</small> */}
@@ -52,7 +57,17 @@ function App() {
               <Route path="/student" component={Student} />
               <PublicRoute path="/register" component={register} />
               <PrivateRoute path="/teacher" component={Teacher} />
-              <PrivateRoute path="/student-records" component={StudentRecords} />
+              <PrivateRoute
+                path="/student-records"
+                component={StudentRecords}
+              />
+              <PrivateRoute path="/student-form" component={StudentForm} />
+              <PrivateRoute path="/personal-student-form" component={PersonalStudentForm} />
+
+              <PrivateRoute
+                path="/all-students-record"
+                component={AllStudentsForm}
+              />
               {/* <PrivateRoute path="/student" component={Student} /> */}
             </Switch>
           </div>

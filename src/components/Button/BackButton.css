@@ -1,0 +1,35 @@
+.settings-back-btn {
+  border: 1px solid black;
+  border-radius: 1000px;
+  background-color: white;
+  align-self: flex-start;
+  /* margin-left: 1.5rem;
+  margin-bottom: 1.5rem; */
+  padding-left: 1rem;
+  padding-right: 1rem;
+  cursor: pointer;
+
+
+  width: max-content;
+  height: 25px;
+  font-size: 0.7rem;
+
+ 
+  /* visibility: hidden; */
+  
+
+  @media only screen and (max-width: 760px) {
+  
+    /* visibility: unset; */
+   
+  }
+
+  @media only screen and (max-width: 525px) {
+ 
+  } 
+}
+
+
+.settings-back-btn:hover{
+  background-color: blanchedalmond;
+}
