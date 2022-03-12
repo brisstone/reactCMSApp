@@ -79,6 +79,7 @@ export default function Teacher(props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [sudoemail, setsudoEmail] = useState("");
+  const [currentTeacher, setcurrentTeacher] = useState('')
 
   var Stor = false;
   const html = '<p id="para">asdfsd</p>';
@@ -193,6 +194,11 @@ export default function Teacher(props) {
   useEffect(() => {
     setsudoEmail(props.match.params.email);
   }, []);
+
+  useEffect(() => {
+   var teacher = sessionStorage.getItem("token") || null;
+    setcurrentTeacher(teacher);
+  }, [])
 
   const handleViewStudentS = () => {
     // props.history.push(`/student-records`)
@@ -564,7 +570,7 @@ export default function Teacher(props) {
   return (
     <div className="teacher">
       {/* {user.name}! */}
-      Welcome Teacher: {user} <br />
+      Welcome Teacher: {user} {currentTeacher} <br />
       <br />
       {console.log(user)}
       <input

@@ -36,8 +36,8 @@ const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
 
 export default function StudentForm(props) {
-  // const baseUrl = "http://localhost:8000";
-  const baseUrl = "https://pythocmsapi.herokuapp.com";
+  const baseUrl = "http://localhost:8000";
+  // const baseUrl = "https://pythocmsapi.herokuapp.com";
 
   const user = getUser();
 
@@ -626,7 +626,7 @@ export default function StudentForm(props) {
     } else {
       // https://pythocmsapi.herokuapp.com
 
-      console.log(image);
+      console.log(suspended, 'jdjjdjd');
 
       const editedStudentUI = {
         id: student.id,
@@ -716,7 +716,7 @@ export default function StudentForm(props) {
           paddingRight: "20px",
         }}
       >
-        <div> {student ? `Student Name: ${student.FullName}` : ""}</div>{" "}
+        <div> <b>{student ? ` Student Name: ${student.FullName}` : ""}</b> </div>{" "}
         <div>
           {" "}
           <img
@@ -768,7 +768,7 @@ export default function StudentForm(props) {
             type="date"
             id="birthday"
             name="birthday"
-            value={student && student.DateOfBirth}
+            defaultValue={student && student.DateOfBirth}
             onChange={handleDateofbirthOnChange}
             required
           />
@@ -793,7 +793,7 @@ export default function StudentForm(props) {
 
           <fieldset
             // defaultValue={student && student.Degree}
-            value="BSc"
+            // value="BSc"
             onChange={handleRadioOnChange}
             required
           >
@@ -891,7 +891,7 @@ export default function StudentForm(props) {
             </div>
             <select
               onChange={handleExtraCourseOnClick}
-              value={student && student.AdCourses}
+              // value={student && student.AdCourses}
             >
               <option value="" key="">
                 Select
