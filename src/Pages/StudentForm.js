@@ -36,8 +36,8 @@ const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
 
 export default function StudentForm(props) {
-  const baseUrl = "http://localhost:8000";
-  // const baseUrl = "https://pythocmsapi.herokuapp.com";
+  // const baseUrl = "http://localhost:8000";
+  const baseUrl = "https://pythocmsapi.herokuapp.com";
 
   const user = getUser();
 
