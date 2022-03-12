@@ -7,8 +7,8 @@ import ReadOnlyRow from "../components/tableDisplay/ReadOnlyRow";
 import { removeUserSession } from "../Utils/Common";
 
 export default function AllStudentsForm(props) {
-  const baseUrl = "http://localhost:8000";
-  // const baseUrl = "https://pythocmsapi.herokuapp.com";
+  // const baseUrl = "http://localhost:8000";
+  const baseUrl = "https://pythocmsapi.herokuapp.com";
 
   const [teacherEmail, setTeacherEmail] = useState("");
 
