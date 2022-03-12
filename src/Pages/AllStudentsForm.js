@@ -1,16 +1,14 @@
-import Axios from 'axios'
-import React, {useEffect, useState, Fragment} from 'react'
-import { Button, Card, CardBody, Input, Row, Table } from 'reactstrap'
-import BackButton from '../components/Button/BackButton'
-import EditableRow from '../components/tableDisplay/EditableRow'
-import ReadOnlyRow from '../components/tableDisplay/ReadOnlyRow'
-import { removeUserSession } from '../Utils/Common'
-
-
+import Axios from "axios";
+import React, { useEffect, useState, Fragment } from "react";
+import { Button, Card, CardBody, Input, Row, Table } from "reactstrap";
+import BackButton from "../components/Button/BackButton";
+import EditableRow from "../components/tableDisplay/EditableRow";
+import ReadOnlyRow from "../components/tableDisplay/ReadOnlyRow";
+import { removeUserSession } from "../Utils/Common";
 
 export default function AllStudentsForm(props) {
-  // const baseUrl = 'http://localhost:8000'
-  const baseUrl = "https://pythocmsapi.herokuapp.com";
+  const baseUrl = "http://localhost:8000";
+  // const baseUrl = "https://pythocmsapi.herokuapp.com";
 
   const [teacherEmail, setTeacherEmail] = useState("");
 
@@ -19,7 +17,7 @@ export default function AllStudentsForm(props) {
   const [editStudentID, seteditStudentID] = useState(null);
   const [updateData, setUpdateData] = useState([]);
   const [message, setMessage] = useState("");
-  const [searchMajorFieldIn, setsearchMajorFieldIn] = useState('')
+  const [searchMajorFieldIn, setsearchMajorFieldIn] = useState("");
   // const [teacherEmail, setteacherEmail] = useState('')
 
   const [editFormData, setEditFormData] = useState({
@@ -73,33 +71,30 @@ export default function AllStudentsForm(props) {
     // }
   };
 
+  const handleMajorFieldSearch = async (e) => {
+    console.log(e.target.value, "dkdkkd");
+    setsearchMajorFieldIn(e.target.value);
 
+    const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
+      search: e.target.value,
+    });
 
-    const handleMajorFieldSearch = async (e) => {
-      setsearchMajorFieldIn(e.target.value);
+    // setData(data)
+    console.log(data, "1ppppppppppp");
 
-      const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
-        search: searchMajorFieldIn,
-      });
-
-      // setData(data)
-      console.log(data, "1ppppppppppp");
-
-      if (data.data.length !== 0) {
-        console.log(data.data.userinfo[0].Email, "ksuyujsys");
-        if (data.data.userinfo[0].Email.includes("@")) {
-          console.log("jqqqqqqqqqqqqqqqqqqqwer");
-          setData(data.data.userinfo);
-        }
+    if (data.data.length !== 0) {
+      console.log(data.data.userinfo[0].Email, "ksuyujsys");
+      if (data.data.userinfo[0].Email.includes("@")) {
+        console.log("jqqqqqqqqqqqqqqqqqqqwer");
+        setData(data.data.userinfo);
       }
+    }
 
-      // if (data.data.userinfo.includes("@")){
+    // if (data.data.userinfo.includes("@")){
 
-      //   console.log('jqqqqqqqqqqqqqqqqqqqwer')
-      // }
-    };
-
-  
+    //   console.log('jqqqqqqqqqqqqqqqqqqqwer')
+    // }
+  };
 
   const getStudentRecords = async () => {
     const data = await Axios.post(`${baseUrl}/getalluser`, { admemail: email });
@@ -271,7 +266,7 @@ export default function AllStudentsForm(props) {
         <div>
           {" "}
           <h4 style={{ Color: "red", fontWeight: "bold" }}>
-            INPUT COURSES AND ADDITIONAL COURSES SEPARATED BY COMMA
+            {/* INPUT COURSES AND ADDITIONAL COURSES SEPARATED BY COMMA */}
           </h4>{" "}
         </div>
         <div>{message}</div>
@@ -280,20 +275,44 @@ export default function AllStudentsForm(props) {
           <CardBody>
             <Card>
               <Row>
-                <Input
-                  placeholder="email search..."
-                  style={{ height: "2rem", width: "15rem" }}
-                  className="form-control"
-                  onChange={handleSearch}
-                />
-                <Input
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    columnGap: "2rem",
+                  }}
+                >
+                  <Input
+                    placeholder="email search..."
+                    style={{ height: "2rem", width: "15rem" }}
+                    className="form-control"
+                    onChange={handleSearch}
+                  />
+                  <div>
+                    {" "}
+                    {/* <div>Major Courses</div> */}
+                    <div>
+                      {" "}
+                      <select
+                        style={{ height: "2.4rem", width: "15rem" }}
+                        className="form-control"
+                        onChange={handleMajorFieldSearch}
+                      >
+                        <option value="Science">Science</option>
+                        <option value="Art">Art</option>
+                        <option value="Commercial">Commercial</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </Row>
+              {/* <Input
                   placeholder="major field search..."
                   style={{ height: "2rem", width: "15rem" }}
                   className="form-control"
                   onChange={handleMajorFieldSearch}
-                />
-
-                {/* <Input
+                /> */}
+              {/* <Input
                     onChange={this.onChange}
                     value={this.state.email}
                     id="email"
@@ -304,76 +323,68 @@ export default function AllStudentsForm(props) {
                     autoComplete="off"
                     className="form-control"
                   /> */}
+              <Table className="styled-table" striped bordered hover size="sm">
+                <thead>
+                  <tr className="active-row">
+                    <th>Email</th>
+                    <th>FullName</th>
+                    <th>Date of Birth</th>
+                    <th> Major Field of Study</th>
+                    <th>Minor Field of Study</th>
+                    <th>Courses</th>
+                    <th>Additional Courses</th>
+                    <th>Degree</th>
+                    <th>Edit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data &&
+                    data.map((student) => (
+                      <>
+                        <tr>
+                          <td>{student.Email}</td>
 
-                <Table
-                  className="styled-table"
-                  striped
-                  bordered
-                  hover
-                  size="sm"
-                >
-                  <thead>
-                    <tr className="active-row">
-                      <th>Email</th>
-                      <th>FullName</th>
-                      <th>Date of Birth</th>
-                      <th> Major Field of Study</th>
-                      <th>Minor Field of Study</th>
-                      <th>Courses</th>
-                      <th>Additional Courses</th>
-                      <th>Degree</th>
-                      <th>Edit</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data &&
-                      data.map((student) => (
-                        <>
-                          <tr>
-                            <td>{student.Email}</td>
+                          <td>{student.FullName}</td>
+                          <td>{student.DateOfBirth}</td>
+                          <td>{student.MajorFieldOfStudy}</td>
+                          <td>{student.MinorFieldOfStudy}</td>
+                          <td>{student.Courses}</td>
+                          <td>{student.AdCourses}</td>
+                          <td>{student.Degree}</td>
+                          <td>
+                            <Button
+                              onClick={() =>
+                                props.history.push({
+                                  pathname: "/student-form",
+                                  student: student,
+                                })
+                              }
+                            >
+                              Edit
+                            </Button>{" "}
+                          </td>
+                        </tr>
+                      </>
+                      // <Fragment>
+                      //   {editStudentID === student.id ? (
+                      //     <EditableRow
+                      //       key={1}
+                      //       editFormData={editFormData}
+                      //       handleEditFormChange={handleEditFormChange}
+                      //       handleCancelClick={handleCancelClick}
+                      //     />
+                      //   ) : (
+                      //     <ReadOnlyRow
+                      //       key={2}
+                      //       student={student}
+                      //       handleEditClick={handleEditClick}
 
-                            <td>{student.FullName}</td>
-                            <td>{student.DateOfBirth}</td>
-                            <td>{student.MajorFieldOfStudy}</td>
-                            <td>{student.MinorFieldOfStudy}</td>
-                            <td>{student.Courses}</td>
-                            <td>{student.AdCourses}</td>
-                            <td>{student.Degree}</td>
-                            <td>
-                              <Button
-                                onClick={() =>
-                                  props.history.push({
-                                    pathname: "/student-form",
-                                    student: student,
-                                  })
-                                }
-                              >
-                                Edit
-                              </Button>{" "}
-                            </td>
-                          </tr>
-                        </>
-                        // <Fragment>
-                        //   {editStudentID === student.id ? (
-                        //     <EditableRow
-                        //       key={1}
-                        //       editFormData={editFormData}
-                        //       handleEditFormChange={handleEditFormChange}
-                        //       handleCancelClick={handleCancelClick}
-                        //     />
-                        //   ) : (
-                        //     <ReadOnlyRow
-                        //       key={2}
-                        //       student={student}
-                        //       handleEditClick={handleEditClick}
-
-                        //     />
-                        //   )}
-                        // </Fragment>
-                      ))}
-                  </tbody>
-                </Table>
-              </Row>
+                      //     />
+                      //   )}
+                      // </Fragment>
+                    ))}
+                </tbody>
+              </Table>
             </Card>
           </CardBody>
         </form>
