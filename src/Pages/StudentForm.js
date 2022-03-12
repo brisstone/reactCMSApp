@@ -640,7 +640,7 @@ export default function StudentForm(props) {
         Degree: degree || student.Degree,
         SchoolStartYear: startYear || student.SchoolStartYear,
 
-        Suspended: suspended || student.Suspended,
+        Suspended: suspended,
         Remark: editorState || student.Remark,
 
         Picture:
