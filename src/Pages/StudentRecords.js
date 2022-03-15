@@ -328,6 +328,7 @@ export default function StudentRecords(props) {
                             <th  >Courses</th>
                             <th  >Additional Courses</th>
                             <th  >Degree</th>
+                          
                             <th  >Edit</th>
                         </tr>
                         

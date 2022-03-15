@@ -26,6 +26,7 @@ import { Base64 } from "js-base64";
 import Countdown from "antd/lib/statistic/Countdown";
 import Modal from "../components/modal/Modal";
 import BackButton from "../components/Button/BackButton";
+import { RiEye2Fill, RiEye2Line, RiEyeCloseLine } from "react-icons/ri";
 
 // import Base64 from 'crypto-js/enc-base64';
 var CryptoJS = require("crypto-js");
@@ -36,8 +37,8 @@ const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
 
 export default function StudentForm(props) {
-  // const baseUrl = "http://localhost:8000";
-  const baseUrl = "https://pythocmsapi.herokuapp.com";
+  const baseUrl = "http://localhost:8000";
+  // const baseUrl = "https://pythocmsapi.herokuapp.com";
 
   const user = getUser();
 
@@ -63,6 +64,8 @@ export default function StudentForm(props) {
   const [suspended, setSuspended] = useState(false);
   // const [avgGrade, setAvgGrade] = useState('')
   const [comment, setComment] = useState("");
+
+  const [showPassword, setshowPassword] = useState(true);
   // const [editorState, setEditorState] = React.useState(
   //   () =>
   //     // EditorState.createEmpty()
@@ -442,9 +445,7 @@ export default function StudentForm(props) {
   //   [editorState]
   // );
 
-  const onEditorStateChange = (e)=>[
-    setEditorState(e.target.value)
-  ]
+  const onEditorStateChange = (e) => [setEditorState(e.target.value)];
 
   const handleSuspensionChange = () => {
     setSuspended(!suspended);
@@ -463,7 +464,7 @@ export default function StudentForm(props) {
   //     const fileReader = new FileReader();
   //     fileReader.readAsDataURL(file);
   //     fileReader.onload = () => {
-      
+
   //       setImageShow(fileReader.result);
   //         resolve();
   //     };
@@ -473,33 +474,32 @@ export default function StudentForm(props) {
   //   });
   // };
 
+  const convertToBase64 = (file) => {
+    console.log(file, "djjddj");
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        setImageShow(fileReader.result);
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
 
-    const convertToBase64 = (file) => {
-      console.log(file, "djjddj");
-      return new Promise((resolve, reject) => {
-        const fileReader = new FileReader();
-        fileReader.readAsDataURL(file);
-        fileReader.onload = () => {
-          setImageShow(fileReader.result);
-          resolve(fileReader.result);
-        };
-        fileReader.onerror = (error) => {
-          reject(error);
-        };
-      });
-
-      // return btoa(file);
-    };
+    // return btoa(file);
+  };
 
   const fileSelectorHandler = async (e) => {
-    console.log('oipi')
+    console.log("oipi");
     console.log(e.target.files[0]);
     const file = e.target.files[0];
 
     const base64 = await convertToBase64(file);
     setSelectedFile({ ...selectedFile, myFile: base64 });
 
-    console.log(selectedFile, 'lkkkss');
+    console.log(selectedFile, "lkkkss");
     setIsSelected(true);
   };
 
@@ -626,7 +626,7 @@ export default function StudentForm(props) {
     } else {
       // https://pythocmsapi.herokuapp.com
 
-      console.log(suspended, 'jdjjdjd');
+      console.log(suspended, "jdjjdjd");
 
       const editedStudentUI = {
         id: student.id,
@@ -639,7 +639,7 @@ export default function StudentForm(props) {
         AdCourses: extraCourseList || student.AdCourses,
         Degree: degree || student.Degree,
         SchoolStartYear: startYear || student.SchoolStartYear,
-
+        Password: password || student.Password,
         Suspended: suspended,
         Remark: editorState || student.Remark,
 
@@ -716,7 +716,10 @@ export default function StudentForm(props) {
           paddingRight: "20px",
         }}
       >
-        <div> <b>{student ? ` Student Name: ${student.FullName}` : ""}</b> </div>{" "}
+        <div>
+          {" "}
+          <b>{student ? ` Student Name: ${student.FullName}` : ""}</b>{" "}
+        </div>{" "}
         <div>
           {" "}
           <img
@@ -739,28 +742,52 @@ export default function StudentForm(props) {
         </div>
 
         <div className="input-container">
-          <label className="parameter"> Fullname</label>
+          <label className="parameter"> Email</label>
+          <input
+            type="email"
+            value={student && student.Email}
+            placeholder="email"
+            onChange={handleEmailOnChange}
+            required
+            readonly
+          />
+        </div>
+
+        {/* <div className="input-container">
+          <label className="parameter"> Password</label>
           <input
             type="text"
-            defaultValue={student && student.FullName}
+            defaultValue={student && student.password}
             // value={student && student.FullName}
-            placeholder="full-name"
+            placeholder="password"
             onChange={handleFullnameOnChange}
             required
             // readonly="readonly"
           />
-          {/* <input /> */}
-        </div>
-
-        {/* <div>
-          <label className="parameter">Password</label>
-          <input
-            type="password"
-            placeholder="password"
-            onChange={handlePasswordOnChange}
-            required
-          />
+       
         </div> */}
+
+        <div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <label className="parameter">Password</label>
+            <input
+              type={showPassword ? "password" : "text"}
+              placeholder="password"
+              defaultValue={student && student.Password}
+              onChange={handlePasswordOnChange}
+              required
+            />
+            {showPassword ? (
+              <div onClick={() => setshowPassword(!showPassword)}>
+                <RiEye2Fill />
+              </div>
+            ) : (
+              <div onClick={() => setshowPassword(!showPassword)}>
+                <RiEye2Line />
+              </div>
+            )}
+          </div>
+        </div>
 
         <div className="input-container">
           <label className="parameter">Date of birth</label>
@@ -852,7 +879,8 @@ export default function StudentForm(props) {
             <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
               <b> Current COurses</b>
               {/* {console.log(student && student.Courses, "opop")} */}
-              {student && student.Courses?.split(",").map((e) => <div>{e}</div>)}
+              {student &&
+                student.Courses?.split(",").map((e) => <div>{e}</div>)}
             </div>
 
             {type2 ? (
@@ -927,17 +955,13 @@ export default function StudentForm(props) {
 
         <div className="input-container">
           <label className="parameter">Image</label>
-          <input
-            type="file"
-            onChange={fileSelectorHandler}
-          
-          />
+          <input type="file" onChange={fileSelectorHandler} />
           {isSelected ? <p>Image selected</p> : <p>Image not yet selected</p>}
 
           {isSelected && (
             <img style={{ height: "80px", width: "80px" }} src={imageShow} />
           )}
-        </div> 
+        </div>
 
         {/* <div className="input-container">
           <label className="parameter">Image</label>

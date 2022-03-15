@@ -334,6 +334,7 @@ export default function AllStudentsForm(props) {
                     <th>Courses</th>
                     <th>Additional Courses</th>
                     <th>Degree</th>
+                    
                     <th>Edit</th>
                   </tr>
                 </thead>
