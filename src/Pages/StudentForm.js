@@ -730,14 +730,14 @@ export default function StudentForm(props) {
       </div>
       <form className="form" onSubmit={submitHandler}>
         <div className="input-container">
-          <label className="parameter"> Email</label>
+          <label className="parameter"> FullName</label>
           <input
-            type="email"
-            value={student && student.Email}
-            placeholder="email"
-            onChange={handleEmailOnChange}
+            type="name"
+            value={student && student.FullName}
+            placeholder="name"
+            onChange={handleFullnameOnChange}
             required
-            readonly
+            
           />
         </div>
 

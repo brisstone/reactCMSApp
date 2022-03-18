@@ -75,7 +75,9 @@ function Login(props) {
         }else{
 
           
-          props.history.push(`/student`);
+          // props.history.push(`/student`);
+
+          props.history.push(`/personal-student-form`);
           console.log(" student");
       }
      

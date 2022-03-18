@@ -18,6 +18,7 @@ export default function AllStudentsForm(props) {
   const [updateData, setUpdateData] = useState([]);
   const [message, setMessage] = useState("");
   const [searchMajorFieldIn, setsearchMajorFieldIn] = useState("");
+  const [rawData, setrawData] = useState([]);
   // const [teacherEmail, setteacherEmail] = useState('')
 
   const [editFormData, setEditFormData] = useState({
@@ -65,6 +66,13 @@ export default function AllStudentsForm(props) {
       }
     }
 
+    // setData(
+    //   rawData &&
+    //     rawData.filter((s) =>
+    //       s.Email.toLowerCase().includes(searchInput.toLowerCase())
+    //     )
+    // );
+
     // if (data.data.userinfo.includes("@")){
 
     //   console.log('jqqqqqqqqqqqqqqqqqqqwer')
@@ -96,11 +104,15 @@ export default function AllStudentsForm(props) {
     // }
   };
 
+     useEffect(() => {
+      //  setData(rawData);
+     }, [data]);
+
   const getStudentRecords = async () => {
     const data = await Axios.post(`${baseUrl}/getalluser`, { admemail: email });
 
     console.log(data.data.userinfo, "1ppppppppppp");
-
+    setrawData(data.data.userinfo);
     setData(data.data.userinfo);
     console.log(data.data.userinfo[0].Email, "1ppppppppppp");
   };
@@ -207,6 +219,8 @@ export default function AllStudentsForm(props) {
 
     console.log(editedStudent, "jjjjjjjjjjjjhhhhhhh");
 
+ 
+
     //update student record
     updateStudentRecord(editedStudent, teacherEmail);
 
@@ -306,23 +320,7 @@ export default function AllStudentsForm(props) {
                   </div>
                 </div>
               </Row>
-              {/* <Input
-                  placeholder="major field search..."
-                  style={{ height: "2rem", width: "15rem" }}
-                  className="form-control"
-                  onChange={handleMajorFieldSearch}
-                /> */}
-              {/* <Input
-                    onChange={this.onChange}
-                    value={this.state.email}
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="Email"
-                    required
-                    autoComplete="off"
-                    className="form-control"
-                  /> */}
+
               <Table className="styled-table" striped bordered hover size="sm">
                 <thead>
                   <tr className="active-row">
@@ -334,56 +332,41 @@ export default function AllStudentsForm(props) {
                     <th>Courses</th>
                     <th>Additional Courses</th>
                     <th>Degree</th>
-                    
+
                     <th>Edit</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data &&
-                    data.map((student) => (
-                      <>
-                        <tr>
-                          <td>{student.Email}</td>
+                    data
+                      .filter((e) => e.Adm !== 1)
+                      .map((student) => (
+                        <>
+                          <tr>
+                            <td>{student.Email}</td>
 
-                          <td>{student.FullName}</td>
-                          <td>{student.DateOfBirth}</td>
-                          <td>{student.MajorFieldOfStudy}</td>
-                          <td>{student.MinorFieldOfStudy}</td>
-                          <td>{student.Courses}</td>
-                          <td>{student.AdCourses}</td>
-                          <td>{student.Degree}</td>
-                          <td>
-                            <Button
-                              onClick={() =>
-                                props.history.push({
-                                  pathname: "/student-form",
-                                  student: student,
-                                })
-                              }
-                            >
-                              Edit
-                            </Button>{" "}
-                          </td>
-                        </tr>
-                      </>
-                      // <Fragment>
-                      //   {editStudentID === student.id ? (
-                      //     <EditableRow
-                      //       key={1}
-                      //       editFormData={editFormData}
-                      //       handleEditFormChange={handleEditFormChange}
-                      //       handleCancelClick={handleCancelClick}
-                      //     />
-                      //   ) : (
-                      //     <ReadOnlyRow
-                      //       key={2}
-                      //       student={student}
-                      //       handleEditClick={handleEditClick}
-
-                      //     />
-                      //   )}
-                      // </Fragment>
-                    ))}
+                            <td>{student.FullName}</td>
+                            <td>{student.DateOfBirth}</td>
+                            <td>{student.MajorFieldOfStudy}</td>
+                            <td>{student.MinorFieldOfStudy}</td>
+                            <td>{student.Courses}</td>
+                            <td>{student.AdCourses}</td>
+                            <td>{student.Degree}</td>
+                            <td>
+                              <Button
+                                onClick={() =>
+                                  props.history.push({
+                                    pathname: "/student-form",
+                                    student: student,
+                                  })
+                                }
+                              >
+                                Edit
+                              </Button>{" "}
+                            </td>
+                          </tr>
+                        </>
+                      ))}
                 </tbody>
               </Table>
             </Card>

@@ -26,6 +26,7 @@ import { Base64 } from "js-base64";
 import Countdown from "antd/lib/statistic/Countdown";
 import Modal from "../components/modal/Modal";
 import BackButton from "../components/Button/BackButton";
+import Axios from "axios";
 
 // import Base64 from 'crypto-js/enc-base64';
 var CryptoJS = require("crypto-js");
@@ -82,28 +83,67 @@ export default function PersonalStudentForm(props) {
   const [sudoemail, setsudoEmail] = useState("");
   const [student, setstudent] = useState();
   const [teacherEmail, setTeacherEmail] = useState("");
+  const [studentEmail, setstudentEmail] = useState("");
+ const [data, setData] = useState([]);
+
 
   useEffect(() => {
-    // setsudoEmail(props.match.params.email)
-    // props.location.state;
-    setstudent(props.location.student);
-    setStartYear(student && student.SchoolStartYear);
-    setComment(student && student.Comments);
-    setMinorfieldvalue(student && student.MinorFieldOfStudy);
-    setMajorfieldvalue(student && student.MajorFieldOfStudy);
+    const email = sessionStorage.getItem("token") || null;
 
-    if (student && student.Suspended == 1) {
-      setSuspended(true);
-    } else {
-      setSuspended(false);
-    }
-    // console.log(sudoemail, 'jjjjjj')
-    // email = sessionStorage.getItem("token") || null;
-    // getStudentRecords(email);
-    // console.log(email, "kkstttttttttt");
-    // setTeacherEmail(email);
-    // console.log(teacherEmail, "rrrrrrrrrrrrrrrrrooooooooooooooorrrrrrrrrrro");
+    setstudentEmail(email);
+
+    //get student record
+    getStudent(email);
   }, [student]);
+
+
+    const getStudent = async (email) => {
+      const data = await Axios.post(`${baseUrl}/getstudentinfo`, {
+        email: email,
+      });
+      console.log(data.data.userinfo, "uuuujjjjjjjjj");
+      setData(data.data.userinfo);
+      // setstudent(data.data.userinfo.map(e => e));
+      data.data.userinfo.map((e) => 
+      setstudent(e)
+      );
+      
+        setStartYear(student && student.SchoolStartYear);
+        setComment(student && student.Comments);
+        setMinorfieldvalue(student && student.MinorFieldOfStudy);
+        setMajorfieldvalue(student && student.MajorFieldOfStudy);
+
+        if (student && student.Suspended == 1) {
+          setSuspended(true);
+        } else {
+          setSuspended(false);
+        }
+    };
+
+
+    console.log(majorfieldvalue, 'jdjdjjd')
+
+
+
+  // useEffect(() => {
+ 
+  //   setstudent(props.location.student);
+  //   setStartYear(student && student.SchoolStartYear);
+  //   setComment(student && student.Comments);
+  //   setMinorfieldvalue(student && student.MinorFieldOfStudy);
+  //   setMajorfieldvalue(student && student.MajorFieldOfStudy);
+
+  //   if (student && student.Suspended == 1) {
+  //     setSuspended(true);
+  //   } else {
+  //     setSuspended(false);
+  //   }
+
+  // }, [student]);
+
+
+
+
 
   console.log(
     student,

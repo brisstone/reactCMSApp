@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
+import axios from "axios";
 
-import Login from './Login';
-import Teacher from './Teacher';
-import Home from './Home';
+import Login from "./Login";
+import Teacher from "./Teacher";
+import Home from "./Home";
 
-import PrivateRoute from './Utils/PrivateRoute';
-import PublicRoute from './Utils/PublicRoute';
-import { getToken, removeUserSession, setUserSession } from './Utils/Common';
-import register from './Register';
-import Student from './Pages/Student';
-import StudentRecords from './Pages/StudentRecords';
-import StudentForm from './Pages/StudentForm';
-import AllStudentsForm from './Pages/AllStudentsForm';
-import PersonalStudentForm from './Pages/PersonalStudentForm';
+import PrivateRoute from "./Utils/PrivateRoute";
+import PublicRoute from "./Utils/PublicRoute";
+import { getToken, removeUserSession, setUserSession } from "./Utils/Common";
+import register from "./Register";
+import Student from "./Pages/Student";
+import StudentRecords from "./Pages/StudentRecords";
+import StudentForm from "./Pages/StudentForm";
+import AllStudentsForm from "./Pages/AllStudentsForm";
+import PersonalStudentForm from "./Pages/PersonalStudentForm";
 
 function App() {
   const [authLoading, setAuthLoading] = useState(true);
@@ -24,18 +24,18 @@ function App() {
     if (!token) {
       return;
     }
-
-    axios.get(`http://localhost:4000/verifyToken?token=${token}`).then(response => {
-      setUserSession(response.data.token, response.data.user);
-      setAuthLoading(false);
-    }).catch(error => {
-      removeUserSession();
-      setAuthLoading(false);
-    });
+    setAuthLoading(false);
+    // axios.get(`http://localhost:4000/verifyToken?token=${token}`).then(response => {
+    //   setUserSession(response.data.token, response.data.user);
+    //   setAuthLoading(false);
+    // }).catch(error => {
+    //   removeUserSession();
+    //   setAuthLoading(false);
+    // });
   }, []);
 
   if (authLoading && getToken()) {
-    return <div className="content">Checking Authentication...</div>
+    return <div className="content">Checking Authentication...</div>;
   }
 
   return (
@@ -62,7 +62,10 @@ function App() {
                 component={StudentRecords}
               />
               <PrivateRoute path="/student-form" component={StudentForm} />
-              <PrivateRoute path="/personal-student-form" component={PersonalStudentForm} />
+              <PrivateRoute
+                path="/personal-student-form"
+                component={PersonalStudentForm}
+              />
 
               <PrivateRoute
                 path="/all-students-record"
