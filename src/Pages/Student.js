@@ -223,12 +223,7 @@ console.log(data, 'iiiiiiiiiiiiiiiiiiiiiiiiii')
         </div>
 
         <div>
-          <div>
-            {" "}
-            <h4 style={{ Color: "red", fontWeight: "bold" }}>
-              INPUT COURSES AND ADDITIONAL COURSES SEPARATED BY COMMA
-            </h4>{" "}
-          </div>
+      
         </div>
 
         <div>{message}</div>

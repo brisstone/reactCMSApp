@@ -736,11 +736,11 @@ export default function StudentForm(props) {
 
           {errorType ? (
             <div className="successMsg">
-              <h3>{message}</h3>
+              <h3 style={{ color: "green" }}>{message}</h3>
             </div>
           ) : (
             <div className="failureMsg">
-              <h3>{message}</h3>
+              <h3 style={{ color: "red" }}>{message}</h3>
             </div>
           )}
         </div>
@@ -957,19 +957,20 @@ export default function StudentForm(props) {
                 )}
               </select>
               <div className="extraCourselist">
-                {extraCourseList && extraCourseList.map((e) => (
-                  <div>
-                    {e}
-                    <button
-                      className="removeBtn"
-                      value={e}
-                      onClick={handleDeleteExtracourse}
-                    >
-                      Remove
-                    </button>
-                    {/* <button value={e} onClick={handleAddExtracourse}>Add</button> */}
-                  </div>
-                ))}
+                {extraCourseList &&
+                  extraCourseList.map((e) => (
+                    <div>
+                      {e}
+                      <button
+                        className="removeBtn"
+                        value={e}
+                        onClick={handleDeleteExtracourse}
+                      >
+                        Remove
+                      </button>
+                      {/* <button value={e} onClick={handleAddExtracourse}>Add</button> */}
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
