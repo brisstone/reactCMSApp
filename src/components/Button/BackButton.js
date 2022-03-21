@@ -7,7 +7,8 @@ export default function BackButton() {
   const history = useHistory();
   return (
     <button onClick={history.goBack} className="settings-back-btn">
-      <ArrowLeftOutlined /> <b>Back</b>
+      <ArrowLeftOutlined style={{ color: "black" }} />{" "}
+      <b style={{ color: "black" }}>Back</b>
     </button>
   );
 }

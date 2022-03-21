@@ -1,12 +1,112 @@
 import Axios from "axios";
 import React, { useEffect, useState, Fragment } from "react";
-import { Button, Card, CardBody, Input, Row, Table } from "reactstrap";
+import { Button, Card, CardBody, Input, Row, 
+ } from "reactstrap";
 import BackButton from "../components/Button/BackButton";
 import EditableRow from "../components/tableDisplay/EditableRow";
 import ReadOnlyRow from "../components/tableDisplay/ReadOnlyRow";
 import { removeUserSession } from "../Utils/Common";
+import Spinner from "../components/spinner/Spinner";
+import { Select, Spin } from "antd";
+import { Table, Tag, Space } from "antd";
+import "antd/dist/antd.css";
+import { useHistory } from "react-router-dom";
+const { Option } = Select;
+
+
+
+
+const dataCLone= [
+      {
+         "id":1,
+         "Email":"teyo@gmail.com",
+         "Password":"9876",
+         "Adm":1,
+         "FullName":"Ezekiel Man",
+         "DateOfBirth":"1997-11-06",
+         "Picture":"empty",
+         "SchoolStartYear":"2011",
+         "MajorFieldOfStudy":"Science",
+         "MinorFieldOfStudy":"Physics",
+         "Courses":"Physics1,Physics2,Physics3",
+         "AdCourses":"Poet1,Law3",
+         "Average":null,
+         "Comments":null,
+         "Suspended":0,
+         "Remark":"empty",
+         "Degree":"BA"
+      },
+]
+
+
 
 export default function AllStudentsForm(props) {
+const history = useHistory();
+
+
+  const columns = [
+    {
+      title: "Email",
+      dataIndex: "Email",
+      key: "Email",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "FullName",
+      dataIndex: "FullName",
+      key: "FullName",
+    },
+    {
+      title: "SchoolStartYear",
+      dataIndex: "SchoolStartYear",
+      key: "SchoolStartYear",
+    },
+    {
+      title: "MajorFieldOfStudy",
+      dataIndex: "MajorFieldOfStudy",
+      key: "MajorFieldOfStudy",
+    },
+    {
+      title: "MinorFieldOfStudy",
+      dataIndex: "MinorFieldOfStudy",
+      key: "MinorFieldOfStudy",
+    },
+    {
+      title: "Degree",
+      key: "Degree",
+      dataIndex: "Degree",
+    },
+    {
+      title: "DateOfBirth",
+      key: "DateOfBirth",
+      dataIndex: "DateOfBirth",
+    },
+    {
+      title: "Edit",
+      key: "id",
+      dataIndex: "id",
+      render: (text, record) => (
+        <Space size="middle">
+          {/* <a>
+            Invite {text} {record.id}
+          </a>
+          <a>Delete</a> */}
+          <Button
+            onClick={() =>
+              history.push({
+                pathname: "/student-form",
+                student: record,
+              })
+            }
+          >
+            Edit
+          </Button>
+        </Space>
+      ),
+    },
+  ];
+
+  
   // const baseUrl = "http://localhost:8000";
   const baseUrl = "https://pythocmsapi.herokuapp.com";
 
@@ -19,6 +119,8 @@ export default function AllStudentsForm(props) {
   const [message, setMessage] = useState("");
   const [searchMajorFieldIn, setsearchMajorFieldIn] = useState("");
   const [rawData, setrawData] = useState([]);
+  const [loading, setloading] = useState(false)
+  const [sourceData, setsourceData] = useState()
   // const [teacherEmail, setteacherEmail] = useState('')
 
   const [editFormData, setEditFormData] = useState({
@@ -51,27 +153,27 @@ export default function AllStudentsForm(props) {
   const handleSearch = async (e) => {
     setSearchInput(e.target.value);
 
-    const data = await Axios.post(`${baseUrl}/admsearch`, {
-      search: searchInput,
-    });
+    // const data = await Axios.post(`${baseUrl}/admsearch`, {
+    //   search: searchInput,
+    // });
 
-    // setData(data)
-    console.log(data, "1ppppppppppp");
+    // // setData(data)
+    // console.log(data, "1ppppppppppp");
 
-    if (data.data.length !== 0) {
-      console.log(data.data.userinfo[0].Email, "ksuyujsys");
-      if (data.data.userinfo[0].Email.includes("@")) {
-        console.log("jqqqqqqqqqqqqqqqqqqqwer");
-        setData(data.data.userinfo);
-      }
-    }
+    // if (data.data.length !== 0) {
+    //   console.log(data.data.userinfo[0].Email, "ksuyujsys");
+    //   if (data.data.userinfo[0].Email.includes("@")) {
+    //     console.log("jqqqqqqqqqqqqqqqqqqqwer");
+    //     setData(data.data.userinfo);
+    //   }
+    // }
 
-    // setData(
-    //   rawData &&
-    //     rawData.filter((s) =>
-    //       s.Email.toLowerCase().includes(searchInput.toLowerCase())
-    //     )
-    // );
+    setData(
+      rawData &&
+        data.filter((s) =>
+          s.Email.toLowerCase().includes(searchInput.toLowerCase())
+        )
+    );
 
     // if (data.data.userinfo.includes("@")){
 
@@ -79,24 +181,82 @@ export default function AllStudentsForm(props) {
     // }
   };
 
-  const handleMajorFieldSearch = async (e) => {
-    console.log(e.target.value, "dkdkkd");
-    setsearchMajorFieldIn(e.target.value);
+  const handleMajorFieldSearch = async (value) => {
+    setloading(true)
+    console.log(value, "dkdkkd");
+    setsearchMajorFieldIn(value);
+  //  console.log("I AM NOT ZERO");
+    if(data.length !== 0){
+      console.log("I AM NOT ZERO");
+         if (value === "All") {
+           setloading(true);
+           console.log("hidksks");
 
-    const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
-      search: e.target.value,
-    });
+           setData(rawData);
+           setloading(false);
+         } else {
+           setData(
+             rawData &&
+               data.filter((s) =>
+                 s.MajorFieldOfStudy.toLowerCase().includes(value.toLowerCase())
+               )
+           );
+           setloading(false);
 
-    // setData(data)
-    console.log(data, "1ppppppppppp");
+           // const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
+           //   search: value,
+           // });
 
-    if (data.data.length !== 0) {
-      console.log(data.data.userinfo[0].Email, "ksuyujsys");
-      if (data.data.userinfo[0].Email.includes("@")) {
-        console.log("jqqqqqqqqqqqqqqqqqqqwer");
-        setData(data.data.userinfo);
-      }
+           // // setData(data)
+           // console.log(data, "1ppppppppppp");
+
+           // if (data.data.length !== 0) {
+           //   console.log(data.data.userinfo[0].Email, "ksuyujsys");
+           //   if (data.data.userinfo[0].Email.includes("@")) {
+           //     console.log("jqqqqqqqqqqqqqqqqqqqwer");
+           //     setData(data.data.userinfo);
+           //     setloading(false)
+           //   }
+           // }
+         }
+    }else{
+
+      console.log("I AM ZERO");
+      setData(rawData)
+         if (value === "All") {
+           setloading(true);
+           console.log("hidksks");
+
+           setData(rawData);
+           setloading(false);
+         } else {
+           setData(
+             rawData &&
+               rawData.filter((s) =>
+                 s.MajorFieldOfStudy.toLowerCase().includes(value.toLowerCase())
+               )
+           );
+           setloading(false);
+
+           // const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
+           //   search: value,
+           // });
+
+           // // setData(data)
+           // console.log(data, "1ppppppppppp");
+
+           // if (data.data.length !== 0) {
+           //   console.log(data.data.userinfo[0].Email, "ksuyujsys");
+           //   if (data.data.userinfo[0].Email.includes("@")) {
+           //     console.log("jqqqqqqqqqqqqqqqqqqqwer");
+           //     setData(data.data.userinfo);
+           //     setloading(false)
+           //   }
+           // }
+         }
     }
+
+ 
 
     // if (data.data.userinfo.includes("@")){
 
@@ -104,9 +264,9 @@ export default function AllStudentsForm(props) {
     // }
   };
 
-     useEffect(() => {
-      //  setData(rawData);
-     }, [data]);
+  useEffect(() => {
+    //  setData(rawData);
+  }, [data]);
 
   const getStudentRecords = async () => {
     const data = await Axios.post(`${baseUrl}/getalluser`, { admemail: email });
@@ -114,6 +274,7 @@ export default function AllStudentsForm(props) {
     console.log(data.data.userinfo, "1ppppppppppp");
     setrawData(data.data.userinfo);
     setData(data.data.userinfo);
+    setsourceData(data.data.userinfo);
     console.log(data.data.userinfo[0].Email, "1ppppppppppp");
   };
 
@@ -219,8 +380,6 @@ export default function AllStudentsForm(props) {
 
     console.log(editedStudent, "jjjjjjjjjjjjhhhhhhh");
 
- 
-
     //update student record
     updateStudentRecord(editedStudent, teacherEmail);
 
@@ -263,119 +422,138 @@ export default function AllStudentsForm(props) {
     removeUserSession();
     props.history.push("/login");
   };
+  if(!loading){
+    if (data && data) {
+      return (
+        <div className="student-record">
+          <div className="log-out">
+            <BackButton style={{ backgroundColor: "green" }} />
+            <input
+              className="log-out-btn"
+              type="button"
+              onClick={handleLogout}
+              value="Logout"
+            />
+          </div>
 
-  if (data.length !== 0 && data) {
-    return (
-      <div className="student-record">
-        <div className="log-out">
-          <BackButton />
-          <input
-            className="log-out-btn"
-            type="button"
-            onClick={handleLogout}
-            value="Logout"
-          />
-        </div>
+          <div>
+            {" "}
+            <h4 style={{ Color: "red", fontWeight: "bold" }}>
+              {/* INPUT COURSES AND ADDITIONAL COURSES SEPARATED BY COMMA */}
+            </h4>{" "}
+          </div>
+          <div>{message}</div>
 
-        <div>
-          {" "}
-          <h4 style={{ Color: "red", fontWeight: "bold" }}>
-            {/* INPUT COURSES AND ADDITIONAL COURSES SEPARATED BY COMMA */}
-          </h4>{" "}
-        </div>
-        <div>{message}</div>
-
-        <form onSubmit={handleEditFormSubmit}>
-          <CardBody>
-            <Card>
-              <Row>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    columnGap: "2rem",
-                  }}
-                >
-                  <Input
-                    placeholder="email search..."
-                    style={{ height: "2rem", width: "15rem" }}
-                    className="form-control"
-                    onChange={handleSearch}
-                  />
-                  <div>
-                    {" "}
-                    {/* <div>Major Courses</div> */}
+          <form onSubmit={handleEditFormSubmit}>
+            <CardBody>
+              <Card>
+                <Row>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      columnGap: "2rem",
+                    }}
+                  >
+                    <Input
+                      placeholder="email search..."
+                      style={{ height: "2rem", width: "15rem" }}
+                      className="form-control"
+                      onChange={handleSearch}
+                    />
                     <div>
                       {" "}
-                      <select
-                        style={{ height: "2.4rem", width: "15rem" }}
-                        className="form-control"
-                        onChange={handleMajorFieldSearch}
-                      >
-                        <option value="Science">Science</option>
-                        <option value="Art">Art</option>
-                        <option value="Commercial">Commercial</option>
-                      </select>
+                      {/* <div>Major Courses</div> */}
+                      <div>
+                        {" "}
+                        <Select
+                          style={{ height: "2.4rem", width: "15rem" }}
+                          className="form-control"
+                          onChange={handleMajorFieldSearch}
+                        >
+                          <Option value="All">Select</Option>
+                          <Option value="All">All</Option>
+                          <Option value="Science">Science</Option>
+                          <Option value="Art">Art</Option>
+                          <Option value="Commercial">Commercial</Option>
+                        </Select>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Row>
+                </Row>
 
-              <Table className="styled-table" striped bordered hover size="sm">
-                <thead>
-                  <tr className="active-row">
-                    <th>Email</th>
-                    <th>FullName</th>
-                    <th>Date of Birth</th>
-                    <th> Major Field of Study</th>
-                    <th>Minor Field of Study</th>
-                    <th>Courses</th>
-                    <th>Additional Courses</th>
-                    <th>Degree</th>
+                <Table columns={columns} dataSource={data} />
 
-                    <th>Edit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data &&
-                    data
-                      .filter((e) => e.Adm !== 1)
-                      .map((student) => (
-                        <>
-                          <tr>
-                            <td>{student.Email}</td>
+                {/* <Table
+                  className="styled-table"
+                  striped
+                  bordered
+                  hover
+                  size="sm"
+                >
+                  <thead>
+                    <tr className="active-row">
+                      <th>Email</th>
+                      <th>FullName</th>
+                      <th>Date of Birth</th>
+                      <th> Major Field of Study</th>
+                      <th>Minor Field of Study</th>
+                      <th>Courses</th>
+                      <th>Additional Courses</th>
+                      <th>Degree</th>
 
-                            <td>{student.FullName}</td>
-                            <td>{student.DateOfBirth}</td>
-                            <td>{student.MajorFieldOfStudy}</td>
-                            <td>{student.MinorFieldOfStudy}</td>
-                            <td>{student.Courses}</td>
-                            <td>{student.AdCourses}</td>
-                            <td>{student.Degree}</td>
-                            <td>
-                              <Button
-                                onClick={() =>
-                                  props.history.push({
-                                    pathname: "/student-form",
-                                    student: student,
-                                  })
-                                }
-                              >
-                                Edit
-                              </Button>{" "}
-                            </td>
-                          </tr>
-                        </>
-                      ))}
-                </tbody>
-              </Table>
-            </Card>
-          </CardBody>
-        </form>
-      </div>
-    );
+                      <th>Edit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data &&
+                      data
+                        .filter((e) => e.Adm !== 1)
+                        .map((student) => (
+                          <>
+                            <tr>
+                              <td>{student.Email}</td>
+
+                              <td>{student.FullName}</td>
+                              <td>{student.DateOfBirth}</td>
+                              <td>{student.MajorFieldOfStudy}</td>
+                              <td>{student.MinorFieldOfStudy}</td>
+                              <td>{student.Courses}</td>
+                              <td>{student.AdCourses}</td>
+                              <td>{student.Degree}</td>
+                              <td>
+                                <Button
+                                  onClick={() =>
+                                    props.history.push({
+                                      pathname: "/student-form",
+                                      student: student,
+                                    })
+                                  }
+                                >
+                                  Edit
+                                </Button>{" "}
+                              </td>
+                            </tr>
+                          </>
+                        ))}
+                  </tbody>
+                </Table> */}
+              </Card>
+            </CardBody>
+          </form>
+        </div>
+      );
+    }
+  }else{
+    return(
+      <Spinner/>
+    )
   }
-  if (data.length === 0) {
-    return <div>Loading......</div>;
-  }
+  // if (data.length === 0) {
+  //   return <div>
+
+  //     <div onClick={()=> setData(rawData)} >Back</div>
+  //     No Record
+  //   </div>;
+  // }
 }

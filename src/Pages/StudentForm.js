@@ -11,12 +11,15 @@ import {
   Entity,
   convertToRaw,
   CompositeDecorator,
+  convertFromHTML,
 } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
+// import { EditorState, ContentState, convertFromHTML } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "draft-js/dist/Draft.css";
 import "../../node_modules/draft-js/dist/Draft.css";
 import "../../src/components/richeditor.css";
+import { Radio } from "antd";
 
 // import 'draft-js/dist/Draft.css';
 // import '../node_modules/draft-js/dist/Draft.css'
@@ -27,6 +30,7 @@ import Countdown from "antd/lib/statistic/Countdown";
 import Modal from "../components/modal/Modal";
 import BackButton from "../components/Button/BackButton";
 import { RiEye2Fill, RiEye2Line, RiEyeCloseLine } from "react-icons/ri";
+import Spinner from "../components/spinner/Spinner";
 
 // import Base64 from 'crypto-js/enc-base64';
 var CryptoJS = require("crypto-js");
@@ -66,13 +70,24 @@ export default function StudentForm(props) {
   const [comment, setComment] = useState("");
 
   const [showPassword, setshowPassword] = useState(true);
-  // const [editorState, setEditorState] = React.useState(
-  //   () =>
-  //     // EditorState.createEmpty()
-  //     ""
-  // );
+  const [editorState, setEditorState] = React.useState(
+    // () => props.location.student && student.Remark
+    EditorState.createWithContent(
+      ContentState.createFromBlockArray(
+        convertFromHTML(
+          `<p>${props.location.student && props.location.student.Remark} </p>`
+        )
+      )
+    )
+  );
 
-  const [editorState, setEditorState] = useState("");
+  // const [state, setState] = useState({
+  //   editorState: EditorState.createWithContent(
+  //    " convertFromRaw(JSON.parse(post.content))"
+  //   ),
+  // });
+
+  // const [editorState, setEditorState] = useState("");
   // setEditorState("empty")
   const [degree, setDegree] = useState("");
 
@@ -90,13 +105,15 @@ export default function StudentForm(props) {
   const [sudoemail, setsudoEmail] = useState("");
   const [student, setstudent] = useState();
   const [teacherEmail, setTeacherEmail] = useState("");
+  // const [loading, setloading] = useState(initialState)
 
   useEffect(() => {
     // setsudoEmail(props.match.params.email)
     // props.location.state;
     setstudent(props.location.student);
-    console.log(student, "sjsjsj");
+    // console.log(student && student.Remark, "sjsjsj");
     setStartYear(student && student.SchoolStartYear);
+     setDegree(student && student.Degree);
     setComment(student && student.Comments);
     setMinorfieldvalue(student && student.MinorFieldOfStudy);
     setMajorfieldvalue(student && student.MajorFieldOfStudy);
@@ -116,9 +133,11 @@ export default function StudentForm(props) {
     // setsudoEmail(props.match.params.email)
     // props.location.state;
     setstudent(props.location.student);
-    console.log(student, "sjsjsj");
+    // console.log(student, "sjsjsj");
+    console.log(student && student.Remark, "sjsjsj");
     setStartYear(student && student.SchoolStartYear);
     setComment(student && student.Comments);
+    setDegree(student && student.Degree);
     setMinorfieldvalue(student && student.MinorFieldOfStudy);
     setMajorfieldvalue(student && student.MajorFieldOfStudy);
 
@@ -436,11 +455,17 @@ export default function StudentForm(props) {
     setDegree(value);
   };
 
-  // const onEditorStateChange = useCallback(
+  const onRichEditorStateChange = (editorState) => {
+    console.log(editorState, "waha;a");
+    console.log(editorState.getCurrentContent().getPlainText(), "djjdjd");
+    setEditorState(editorState.getCurrentContent().getPlainText());
+  };
+
+  // const onRichEditorStateChange = useCallback(
   //   (rawcontent) => {
   //     setCheckEditorBox(true);
   //     console.log(rawcontent);
-  //     setEditorState(rawcontent.blocks[0].text);
+  //     // setEditorState(rawcontent.blocks[0].text);
   //   },
   //   [editorState]
   // );
@@ -576,6 +601,8 @@ export default function StudentForm(props) {
 
     console.log(degree);
 
+    var editorClone
+
     console.log(extraCourseList, "lllll");
 
     //filter to get the unchecked courselist (i.e wanted courses)
@@ -606,7 +633,8 @@ export default function StudentForm(props) {
 
     if (editorState._immutable) {
       console.log("111");
-      setEditorState("empty");
+      setEditorState("noComment");
+      editorClone = student?.Remark;
     }
 
     if (startYear.length < 4) {
@@ -639,9 +667,9 @@ export default function StudentForm(props) {
         AdCourses: extraCourseList || student.AdCourses,
         Degree: degree || student.Degree,
         SchoolStartYear: startYear || student.SchoolStartYear,
-        Password: password || student.Password,
+        Password: password || Base64.encode(student.Password),
         Suspended: suspended,
-        Remark: editorState || student.Remark,
+        Remark: editorClone || editorState || student.Remark,
 
         Picture:
           (image.myFile && image) ||
@@ -674,86 +702,90 @@ export default function StudentForm(props) {
     console.log(collectCourseList);
   }, [majorfieldvalue, collectCourseList, cloneType2, editorState]);
 
-  console.log(errorType);
+  console.log(degree, 'hhhh');
   return (
-    <div className="teacher">
-      {/* {user.name}! */}
-      {/* Welcome Teacher: {user} <br />
+    <>
+      {/* {!loading ? <>jj</> 
+      
+      
+      : <Spinner />} */}
+      <div className="teacher">
+        {/* {user.name}! */}
+        {/* Welcome Teacher: {user} <br />
       <br /> */}
-      {console.log(user)}
-      {/* <input
+        {console.log(user)}
+        {/* <input
         type="button"
         className="removeBtn"
         onClick={handleViewStudentS}
         value="View Student Records"
       /> */}
-      <BackButton />
-      <input
-        type="button"
-        className="removeBtn"
-        onClick={handleLogout}
-        value="Logout"
-      />
-      <div className="errorMsg">
-        <div style={{ color: "red" }}> {error}</div>
+        <BackButton />
+        <input
+          type="button"
+          className="removeBtn"
+          onClick={handleLogout}
+          value="Logout"
+        />
+        <div className="errorMsg">
+          <div style={{ color: "red" }}> {error}</div>
 
-        {errorType ? (
-          <div className="successMsg">
-            <h3>{message}</h3>
+          {errorType ? (
+            <div className="successMsg">
+              <h3>{message}</h3>
+            </div>
+          ) : (
+            <div className="failureMsg">
+              <h3>{message}</h3>
+            </div>
+          )}
+        </div>
+        <div>Update Students Record</div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingRight: "20px",
+          }}
+        >
+          <div>
+            {" "}
+            <b>{student ? ` Student Name: ${student.FullName}` : ""}</b>{" "}
+          </div>{" "}
+          <div>
+            {" "}
+            <img
+              style={{ width: "80px", height: "80px" }}
+              src={student && `data:image/jpeg;base64,${student.Picture}`}
+            />
           </div>
-        ) : (
-          <div className="failureMsg">
-            <h3>{message}</h3>
+        </div>
+        <form className="form" onSubmit={submitHandler}>
+          <div className="input-container">
+            <label className="parameter"> FullName</label>
+            <input
+              type="name"
+              value={student && student.FullName}
+              placeholder="name"
+              onChange={handleFullnameOnChange}
+              required
+            />
           </div>
-        )}
-      </div>
-      <div>Update Students Record</div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingRight: "20px",
-        }}
-      >
-        <div>
-          {" "}
-          <b>{student ? ` Student Name: ${student.FullName}` : ""}</b>{" "}
-        </div>{" "}
-        <div>
-          {" "}
-          <img
-            style={{ width: "80px", height: "80px" }}
-            src={student && `data:image/jpeg;base64,${student.Picture}`}
-          />
-        </div>
-      </div>
-      <form className="form" onSubmit={submitHandler}>
-        <div className="input-container">
-          <label className="parameter"> FullName</label>
-          <input
-            type="name"
-            value={student && student.FullName}
-            placeholder="name"
-            onChange={handleFullnameOnChange}
-            required
-            
-          />
-        </div>
 
-        <div className="input-container">
-          <label className="parameter"> Email</label>
-          <input
-            type="email"
-            value={student && student.Email}
-            placeholder="email"
-            onChange={handleEmailOnChange}
-            required
-            readonly
-          />
-        </div>
+          <div className="input-container">
+            <label className="parameter"> Email</label>
+            <input
+              type="email"
+              value={student && student.Email}
+              placeholder="email"
+              onChange={handleEmailOnChange}
+              required
+              readonly
+            />
+          </div>
 
-        {/* <div className="input-container">
+          {/* <div className="input-container">
           <label className="parameter"> Password</label>
           <input
             type="text"
@@ -767,209 +799,196 @@ export default function StudentForm(props) {
        
         </div> */}
 
-        <div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <label className="parameter">Password</label>
+          <div>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <label className="parameter">Password</label>
+              <input
+                type={showPassword ? "password" : "text"}
+                placeholder="password"
+                defaultValue={student && student.Password}
+                onChange={handlePasswordOnChange}
+                required
+              />
+              {showPassword ? (
+                <div onClick={() => setshowPassword(!showPassword)}>
+                  <RiEye2Fill />
+                </div>
+              ) : (
+                <div onClick={() => setshowPassword(!showPassword)}>
+                  <RiEye2Line />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="input-container">
+            <label className="parameter">Date of birth</label>
             <input
-              type={showPassword ? "password" : "text"}
-              placeholder="password"
-              defaultValue={student && student.Password}
-              onChange={handlePasswordOnChange}
+              type="date"
+              id="birthday"
+              name="birthday"
+              defaultValue={student && student.DateOfBirth}
+              onChange={handleDateofbirthOnChange}
               required
             />
-            {showPassword ? (
-              <div onClick={() => setshowPassword(!showPassword)}>
-                <RiEye2Fill />
-              </div>
-            ) : (
-              <div onClick={() => setshowPassword(!showPassword)}>
-                <RiEye2Line />
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="input-container">
-          <label className="parameter">Date of birth</label>
-          <input
-            type="date"
-            id="birthday"
-            name="birthday"
-            defaultValue={student && student.DateOfBirth}
-            onChange={handleDateofbirthOnChange}
-            required
-          />
-        </div>
-
-        <div className="input-container">
-          <label className="parameter">School Start Year</label>
-          <input
-            maxLength="4"
-            type="text"
-            defaultValue={student && student.SchoolStartYear}
-            placeholder="School Start"
-            onChange={handleStartyearOnChange}
-            required
-          />
-        </div>
-
-        <div className="input-container">
-          <div>
-            <b>Current Degree</b>: {student && student.Degree}
           </div>
 
-          <fieldset
-            // defaultValue={student && student.Degree}
-            // value="BSc"
-            onChange={handleRadioOnChange}
-            required
-          >
-            <legend className="parameter">Degree</legend>
-            {/* common name attribute */}
-            <label className="degreechk">
-              <input name="degree" type="radio" value="BA" />
-              BA
-            </label>
-            <label className="degreechk">
-              <input name="degree" type="radio" value="BSc" />
-              BSc
-            </label>
-            <label className="degreechk">
-              <input name="degree" type="radio" value="PHD" />
-              PHD
-            </label>
-          </fieldset>
-        </div>
-
-        <div className="input-container">
-          <label className="parameter">Major Field of Study</label>
-          <select
-            onChange={majorFieldChangeHandler}
-            defaultValue={majorfieldvalue}
-            required
-          >
-            {/* {console.log("fo", e)} */}
-            <option value="Science" key="1">
-              Science
-            </option>
-            <option value="Art" key="2">
-              Art
-            </option>
-            <option value="Commercial" key="3">
-              Commercial
-            </option>
-          </select>
-        </div>
-
-        <div className="input-container">
-          <label className="parameter">Minor Field of Study</label>
-          <select
-            onChange={handleMinorfieldOnChange}
-            defaultValue={minorfieldvalue}
-            required
-          >
-            <option>select</option>
-            {options}
-          </select>
-        </div>
-
-        <div className="showCourses">
           <div className="input-container">
-            <label className="parameter"> Course List</label>
-            <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
-              <b> Current COurses</b>
-              {/* {console.log(student && student.Courses, "opop")} */}
-              {student &&
-                student.Courses?.split(",").map((e) => <div>{e}</div>)}
-            </div>
-
-            {type2 ? (
-              type2.map((el) => (
-                <div key={el}>
-                  <label htmlFor={el}>
-                    {el}
-
-                    <input
-                      type="checkbox"
-                      defaultChecked={checkState}
-                      id="inline"
-                      name={el}
-                      value={el}
-                      onChange={handleOnChange}
-                    />
-                  </label>
-                </div>
-              ))
-            ) : (
-              <label>&nbsp;</label>
-            )}
+            <label className="parameter">School Start Year</label>
+            <input
+              maxLength="4"
+              type="text"
+              defaultValue={student && student.SchoolStartYear}
+              placeholder="School Start"
+              onChange={handleStartyearOnChange}
+              required
+            />
           </div>
 
-          <div>
-            {/* <label>Other</label> */}
-            <div>
-              <label> Other Courses</label>
-            </div>
+          <div className="input-container">
+            {/* <div>
+              <b>Current Degree</b>: {student && student.Degree}
+            </div> */}
+            <legend className="parameter">Degree:</legend>
+            <Radio.Group onChange={handleRadioOnChange} value={degree}>
+              <Radio value="BA">BA</Radio>
+              <Radio value="BSc">BSc</Radio>
+              <Radio value="MBA">MBA</Radio>
+              <Radio value="PHD">PHD</Radio>
+            </Radio.Group>
 
-            {/* {student && student.AdCourses.map((e) => <div>e</div>)} */}
-            <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
-              <b>Current Additional COurses</b>
-              {student &&
-                student.AdCourses?.split(",").map((e) => <div>{e}</div>)}
-            </div>
+          
+          </div>
+
+          <div className="input-container">
+            <label className="parameter">Major Field of Study</label>
             <select
-              onChange={handleExtraCourseOnClick}
-              // value={student && student.AdCourses}
+              onChange={majorFieldChangeHandler}
+              defaultValue={majorfieldvalue}
+              required
             >
-              <option value="" key="">
-                Select
+              {/* {console.log("fo", e)} */}
+              <option value="Science" key="1">
+                Science
               </option>
+              <option value="Art" key="2">
+                Art
+              </option>
+              <option value="Commercial" key="3">
+                Commercial
+              </option>
+            </select>
+          </div>
 
-              {newallCourses ? (
-                newallCourses.map((e) => (
-                  <option value={e} key={e}>
-                    {e}
-                  </option>
+          <div className="input-container">
+            <label className="parameter">Minor Field of Study</label>
+            <select
+              onChange={handleMinorfieldOnChange}
+              defaultValue={minorfieldvalue}
+              required
+            >
+              <option>select</option>
+              {options}
+            </select>
+          </div>
+
+          <div className="showCourses">
+            <div className="input-container">
+              <label className="parameter"> Course List</label>
+              <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
+                <b> Current COurses</b>
+                {/* {console.log(student && student.Courses, "opop")} */}
+                {student &&
+                  student.Courses?.split(",").map((e) => <div>{e}</div>)}
+              </div>
+
+              {type2 ? (
+                type2.map((el) => (
+                  <div key={el}>
+                    <label htmlFor={el}>
+                      {el}
+
+                      <input
+                        type="checkbox"
+                        defaultChecked={checkState}
+                        id="inline"
+                        name={el}
+                        value={el}
+                        onChange={handleOnChange}
+                      />
+                    </label>
+                  </div>
                 ))
               ) : (
-                <div>&nbsp;</div>
+                <label>&nbsp;</label>
               )}
-            </select>
-            <div className="extraCourselist">
-              {extraCourseList.map((e) => (
-                <div>
-                  {e}
-                  <button
-                    className="removeBtn"
-                    value={e}
-                    onClick={handleDeleteExtracourse}
-                  >
-                    Remove
-                  </button>
-                  {/* <button value={e} onClick={handleAddExtracourse}>Add</button> */}
-                </div>
-              ))}
+            </div>
+
+            <div>
+              {/* <label>Other</label> */}
+              <div>
+                <label> Other Courses</label>
+              </div>
+
+              {/* {student && student.AdCourses.map((e) => <div>e</div>)} */}
+              <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
+                <b>Current Additional COurses</b>
+                {student &&
+                  student.AdCourses?.split(",").map((e) => <div>{e}</div>)}
+              </div>
+              <select
+                onChange={handleExtraCourseOnClick}
+                // value={student && student.AdCourses}
+              >
+                <option value="" key="">
+                  Select
+                </option>
+
+                {newallCourses ? (
+                  newallCourses.map((e) => (
+                    <option value={e} key={e}>
+                      {e}
+                    </option>
+                  ))
+                ) : (
+                  <div>&nbsp;</div>
+                )}
+              </select>
+              <div className="extraCourselist">
+                {extraCourseList.map((e) => (
+                  <div>
+                    {e}
+                    <button
+                      className="removeBtn"
+                      value={e}
+                      onClick={handleDeleteExtracourse}
+                    >
+                      Remove
+                    </button>
+                    {/* <button value={e} onClick={handleAddExtracourse}>Add</button> */}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="input-container">
-          <label className="parameter">Image</label>
-          <input type="file" onChange={fileSelectorHandler} />
-          {isSelected ? <p>Image selected</p> : <p>Image not yet selected</p>}
+          <div className="input-container">
+            <label className="parameter">Image</label>
+            <input type="file" onChange={fileSelectorHandler} />
+            {isSelected ? <p>Image selected</p> : <p>Image not yet selected</p>}
 
-          {isSelected && (
-            <img style={{ height: "80px", width: "80px" }} src={imageShow} />
-          )}
-        </div>
+            {isSelected && (
+              <img style={{ height: "80px", width: "80px" }} src={imageShow} />
+            )}
+          </div>
 
-        {/* <div className="input-container">
+          {/* <div className="input-container">
           <label className="parameter">Image</label>
           <input type="file" onChange={fileSelectorHandler} />
           {isSelected ? <p>Image selected</p> : <p>Image not yet selected</p>}
         </div> */}
 
-        {/* <div className="input-container">
+          {/* <div className="input-container">
            <label className="parameter" >Average Grade</label>
            <label>
                 <input type="text" value={avgGrade} placeholder="average grade" onChange={handleAvgOnChange} required />
@@ -977,39 +996,40 @@ export default function StudentForm(props) {
           
         </div> */}
 
-        <div className="input-container">
-          <label className="parameter">Suspended</label>
-          <input
-            value={student && student.Suspended}
-            type="checkbox"
-            checked={suspended}
-            onChange={handleSuspensionChange}
-          />
-        </div>
-
-        <div className="input-container">
-          <label className="parameter">Comment</label>
-          <div>
-            <textarea
-              defaultValue={student && student.Comments}
-              className="areaText"
-              // value={comment}
-              onChange={handleCommentChange}
-              placeholder="teachers' comment"
+          <div className="input-container">
+            <label className="parameter">Suspended</label>
+            <input
+              value={student && student.Suspended}
+              type="checkbox"
+              checked={suspended}
+              onChange={handleSuspensionChange}
             />
           </div>
-        </div>
 
-        {/* <div className="Editor">
-          <label>Teacher's REmark</label>
-          <Editor
-            // defaultValue={student && student.Remark}
-            // editorState={editorState}
-            onChange={onEditorStateChange}
-          />
-        </div> */}
+          <div className="input-container">
+            <label className="parameter">Comment</label>
+            <div>
+              <textarea
+                defaultValue={student && student.Comments}
+                className="areaText"
+                // value={comment}
+                onChange={handleCommentChange}
+                placeholder="teachers' comment"
+              />
+            </div>
+          </div>
 
-        <div className="input-container">
+          <div className="Editor">
+            <label>Teacher's REmark</label>
+            <Editor
+              // defaultValue={student && student.Remark}
+              // defaultEditorState={`8ddkdkkd`}
+              defaultEditorState={editorState}
+              onEditorStateChange={onRichEditorStateChange}
+            />
+          </div>
+
+          {/* <div className="input-container">
           <label className="parameter">Teacher's REmark</label>
           <div>
             <textarea
@@ -1020,20 +1040,21 @@ export default function StudentForm(props) {
               placeholder="teachers' Remark"
             />
           </div>
-        </div>
+        </div> */}
 
-        <button className="primary" type="submit">
-          Register
-        </button>
-      </form>
-      {isOpen && (
-        <Modal
-          color={color}
-          error={error}
-          sucesss={message}
-          setIsOpen={setIsOpen}
-        />
-      )}
-    </div>
+          <button className="primary" type="submit">
+            Register
+          </button>
+        </form>
+        {isOpen && (
+          <Modal
+            color={color}
+            error={error}
+            sucesss={message}
+            setIsOpen={setIsOpen}
+          />
+        )}
+      </div>
+    </>
   );
 }
