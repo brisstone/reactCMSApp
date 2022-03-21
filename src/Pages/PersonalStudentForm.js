@@ -956,7 +956,7 @@ export default function PersonalStudentForm(props) {
             <textarea
               className="areaText"
               value={student && student.Comment}
-              onChange={handleCommentChange}
+              // onChange={handleCommentChange}
               placeholder="teachers' comment"
               readonly
             />
@@ -971,6 +971,7 @@ export default function PersonalStudentForm(props) {
               // value={comment}
               // onChange={onEditorStateChange}
               placeholder="teachers' Remark"
+              readOnly
             />
           </div>
         </div>
@@ -985,7 +986,7 @@ export default function PersonalStudentForm(props) {
           />
         </div> */}
         <button className="primary" type="submit">
-          Register
+          Update
         </button>
       </form>
       {isOpen && (

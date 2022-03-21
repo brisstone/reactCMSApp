@@ -453,6 +453,7 @@ const history = useHistory();
                       display: "flex",
                       flexDirection: "row",
                       columnGap: "2rem",
+                      marginBottom: '2rem'
                     }}
                   >
                     <Input
@@ -482,7 +483,13 @@ const history = useHistory();
                   </div>
                 </Row>
 
-                <Table columns={columns} dataSource={data} />
+                <Table
+                  // scroll={{ x: true }}
+                  // scroll={{ x: 400 }}
+                  scroll={{ x: 400 }}
+                  columns={columns}
+                  dataSource={data}
+                />
 
                 {/* <Table
                   className="styled-table"

@@ -135,6 +135,10 @@ export default function StudentForm(props) {
     setstudent(props.location.student);
     // console.log(student, "sjsjsj");
     console.log(student && student.Remark, "sjsjsj");
+    // setExtraCourseList(student && student.Courses);
+    // student && student.Courses.split(",").map((e) => setExtraCourseList({...extraCourseList, e}));
+
+    setExtraCourseList(student && student.AdCourses.split(",").map((e) => e));
     setStartYear(student && student.SchoolStartYear);
     setComment(student && student.Comments);
     setDegree(student && student.Degree);
@@ -702,7 +706,7 @@ export default function StudentForm(props) {
     console.log(collectCourseList);
   }, [majorfieldvalue, collectCourseList, cloneType2, editorState]);
 
-  console.log(degree, 'hhhh');
+  console.log(extraCourseList, "hhhh");
   return (
     <>
       {/* {!loading ? <>jj</> 
@@ -856,8 +860,6 @@ export default function StudentForm(props) {
               <Radio value="MBA">MBA</Radio>
               <Radio value="PHD">PHD</Radio>
             </Radio.Group>
-
-          
           </div>
 
           <div className="input-container">
@@ -931,11 +933,11 @@ export default function StudentForm(props) {
               </div>
 
               {/* {student && student.AdCourses.map((e) => <div>e</div>)} */}
-              <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
+              {/* <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
                 <b>Current Additional COurses</b>
                 {student &&
                   student.AdCourses?.split(",").map((e) => <div>{e}</div>)}
-              </div>
+              </div> */}
               <select
                 onChange={handleExtraCourseOnClick}
                 // value={student && student.AdCourses}
@@ -955,7 +957,7 @@ export default function StudentForm(props) {
                 )}
               </select>
               <div className="extraCourselist">
-                {extraCourseList.map((e) => (
+                {extraCourseList && extraCourseList.map((e) => (
                   <div>
                     {e}
                     <button
@@ -1043,7 +1045,7 @@ export default function StudentForm(props) {
         </div> */}
 
           <button className="primary" type="submit">
-            Register
+            Update
           </button>
         </form>
         {isOpen && (
