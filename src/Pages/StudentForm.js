@@ -19,7 +19,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "draft-js/dist/Draft.css";
 import "../../node_modules/draft-js/dist/Draft.css";
 import "../../src/components/richeditor.css";
-import { Radio } from "antd";
+import { Radio, Select } from "antd";
 
 // import 'draft-js/dist/Draft.css';
 // import '../node_modules/draft-js/dist/Draft.css'
@@ -31,6 +31,8 @@ import Modal from "../components/modal/Modal";
 import BackButton from "../components/Button/BackButton";
 import { RiEye2Fill, RiEye2Line, RiEyeCloseLine } from "react-icons/ri";
 import Spinner from "../components/spinner/Spinner";
+import Axios from "axios";
+import { useParams } from "react-router-dom";
 
 // import Base64 from 'crypto-js/enc-base64';
 var CryptoJS = require("crypto-js");
@@ -39,6 +41,8 @@ var SHA256 = require("crypto-js/sha256");
 
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
+const { Option } = Select;
+
 
 export default function StudentForm(props) {
   // const baseUrl = "http://localhost:8000";
@@ -81,14 +85,7 @@ export default function StudentForm(props) {
     )
   );
 
-  // const [state, setState] = useState({
-  //   editorState: EditorState.createWithContent(
-  //    " convertFromRaw(JSON.parse(post.content))"
-  //   ),
-  // });
 
-  // const [editorState, setEditorState] = useState("");
-  // setEditorState("empty")
   const [degree, setDegree] = useState("");
 
   const [checkState, setCheckState] = useState(true);
@@ -105,57 +102,83 @@ export default function StudentForm(props) {
   const [sudoemail, setsudoEmail] = useState("");
   const [student, setstudent] = useState();
   const [teacherEmail, setTeacherEmail] = useState("");
+  const [data, setData] = useState()
   // const [loading, setloading] = useState(initialState)
 
+  console.log(props?.location?.student, "studentCuree");
+
+
+const param = useParams();
+const {studentid} = param
+
+console.log(studentid, 'hhdhd')
+
+  var Temail;
+
   useEffect(() => {
     // setsudoEmail(props.match.params.email)
-    // props.location.state;
-    setstudent(props.location.student);
-    // console.log(student && student.Remark, "sjsjsj");
-    setStartYear(student && student.SchoolStartYear);
-     setDegree(student && student.Degree);
-    setComment(student && student.Comments);
-    setMinorfieldvalue(student && student.MinorFieldOfStudy);
-    setMajorfieldvalue(student && student.MajorFieldOfStudy);
+    // console.log(sudoemail, 'jjjjjj')
+    Temail = sessionStorage.getItem("token") || null;
+    getStudentRecords(Temail);
 
-    if (student && student.Suspended == 1) {
-      setSuspended(true);
-    } else {
-      setSuspended(false);
-    }
+   
+     // setstudent(props?.location?.student);
+     console.log(student && student.Remark, "sjsjsj");
+     setStartYear(student && student.SchoolStartYear);
+     setDegree(student && student.Degree);
+     setComment(student && student.Comments);
+     setMinorfieldvalue(student && student.MinorFieldOfStudy);
+     setMajorfieldvalue(student && student.MajorFieldOfStudy);
+
+     if (student && student.Suspended == 1) {
+       setSuspended(true);
+     } else {
+       setSuspended(false);
+     }
+    
   }, []);
 
-  const updateRecord = () => {
-    setstudent(props.location.student);
-  };
+
+    const getStudentRecords = async (Temail) => {
+      const data = await Axios.post(`${baseUrl}/getalluser`, {
+        admemail: Temail,
+      });
+
+   
+      setstudent(
+        data.data.userinfo.filter((e) => `${e.id}` === `${studentid}`)[0]
+      );
+   
+      setData(data.data.userinfo);
+
+    };
 
   useEffect(() => {
-    // setsudoEmail(props.match.params.email)
-    // props.location.state;
-    setstudent(props.location.student);
-    // console.log(student, "sjsjsj");
-    console.log(student && student.Remark, "sjsjsj");
-    // setExtraCourseList(student && student.Courses);
-    // student && student.Courses.split(",").map((e) => setExtraCourseList({...extraCourseList, e}));
 
-    setExtraCourseList(student && student.AdCourses.split(",").map((e) => e));
-    setStartYear(student && student.SchoolStartYear);
-    setComment(student && student.Comments);
-    setDegree(student && student.Degree);
-    setMinorfieldvalue(student && student.MinorFieldOfStudy);
-    setMajorfieldvalue(student && student.MajorFieldOfStudy);
+     Temail = sessionStorage.getItem("token") || null;
+    getStudentRecords(Temail)
+
+
+
+     if(allNewCoursesClone.length===0){
+
+ setExtraCourseList(student && student.AdCourses.split(",").map((e) => e));
+   setStartYear(student && student.SchoolStartYear);
+   setComment(student && student.Comments);
+   setDegree(student && student.Degree);
+   setMinorfieldvalue(student && student.MinorFieldOfStudy);
+   setMajorfieldvalue(student && student.MajorFieldOfStudy);
+     }
+   
+
+  
 
     if (student && student.Suspended == 1) {
       setSuspended(true);
     } else {
       setSuspended(false);
     }
-    // console.log(sudoemail, 'jjjjjj')
-    // email = sessionStorage.getItem("token") || null;
-    // getStudentRecords(email);
-    // console.log(email, "kkstttttttttt");
-    // setTeacherEmail(email);
-    // console.log(teacherEmail, "rrrrrrrrrrrrrrrrrooooooooooooooorrrrrrrrrrro");
+
   }, [student]);
 
   console.log(
@@ -166,11 +189,9 @@ export default function StudentForm(props) {
   );
 
   useEffect(() => {
-    // setsudoEmail(props.match.params.email)
-    // console.log(sudoemail, 'jjjjjj')
+
     var emailp = sessionStorage.getItem("token") || null;
-    // getStudentRecords(email);
-    // console.log(email, "kkstttttttttt");
+
     setTeacherEmail(emailp);
     console.log(teacherEmail, "rrrrrrrrrrrrrrrrrooooooooooooooorrrrrrrrrrro");
   }, [teacherEmail]);
@@ -191,12 +212,10 @@ export default function StudentForm(props) {
   const Law = ["Law1", "Law2", "Law3"];
   const Poet = ["Poet1", "Poet2", "Poet3"];
   const Singer = ["Singer1", "Singer2", "Singer3"];
+  const [allNewCoursesClone, setallNewCoursesClone] = useState([])
 
-  //   const [checkedState, setCheckedState] = useState(
-  //     new Array(toppings.length).fill(false)
-  // );
 
-  const allCourses = [
+  var allCourses = [
     "Biology1",
     "Biology2",
     "Biology3",
@@ -267,14 +286,10 @@ export default function StudentForm(props) {
    * otherwise it will create a options iterable based on our array
    */
   if (type) {
-    options = type.map((el) => <option key={el}>{el}</option>);
+    options = type.map((el) =>  <option value={el} key={el}>{el}</option>);
   }
 
-  // const newallCourses = type2.forEach((e)=>{
-  //   allCourses.filter(course => course !== e)
-  // })
 
-  // console.log(type2)
   console.log(newallCourses);
 
   var color;
@@ -316,31 +331,13 @@ export default function StudentForm(props) {
     setFullname(value);
   };
 
-  // const convertToBase64 = (file) => {
-  //       return new Promise((resolve, reject) => {
-  //         const fileReader = new FileReader();
-  //         fileReader.readAsDataURL(file);
-  //         fileReader.onload = () => {
-  //           resolve(fileReader.result);
-  //         };
-  //         fileReader.onerror = (error) => {
-  //           reject(error);
-  //         };
-  //       });
-  //     };
+
 
   const handlePasswordOnChange = async (e) => {
     var value = e.target.value;
     // Encrypt
 
-    // var ciphertext = Base64.stringify(CryptoJS.AES.encrypt(value, 'secret key 123').toString());
-    // const nonce = "jay"
-    // const hashDigest = SHA256(value);
-    // const hmacDigest = Base64.stringify(hmacSHA512(path + hashDigest, privateKey));
-
-    // var passbase64 = await convertToBase64(value)
-
-    // const encryptedString = cryptr.encrypt(value);
+ 
 
     setPassword(Base64.encode(value));
     // setPassword(encryptedString)
@@ -366,20 +363,23 @@ export default function StudentForm(props) {
 
     //inserted to make the editor and image selection empty & prevent catch error of not been filled
     setEditorState("empty");
-    // if (!selectedFile) {
-    //   setSelectedFile({ ...selectedFile, myFile: "empty,empty" });
-    // }
+  
 
     setStartYear(value.replace(/[^\d.]/gi, ""));
 
-    // setCourseList(courseList => [...courseList,value] );
+
   };
 
-  const handleMinorfieldOnChange = (e) => {
-    var value = e.target.value;
-    setMinorfieldvalue(value);
-    // setCourseList(courseList => [...courseList,value] );
-  };
+
+
+    function handleMinorfieldOnChange(value) {
+      console.log(`selected ${value}`);
+      setMinorfieldvalue(value);
+  
+    }
+
+
+  
 
   var newallCourses;
 
@@ -400,6 +400,31 @@ export default function StudentForm(props) {
     [type2]
   );
 
+  useEffect(() => {
+     console.log(extraCourseList, "djdjelllpwwuwiw");
+
+     if(allNewCoursesClone.length===0){
+          extraCourseList &&
+            extraCourseList.map(
+              (e) =>
+                setallNewCoursesClone(newallCourses.filter((el) => el !== e))
+              // console.log(e, 'extral')
+            );
+
+     }else{
+        extraCourseList &&
+          extraCourseList.map(
+            (e) => setallNewCoursesClone(allNewCoursesClone.filter((el) => el !== e))
+            // console.log(e, 'extral')
+          );
+     }
+  
+  
+
+  }, [extraCourseList, newallCourses]);
+  console.log(minorfieldvalue, "jogg");
+  console.log(majorfieldvalue, "majorfieldvalue");
+
   console.log(cloneType2);
 
   if (type2) {
@@ -410,32 +435,22 @@ export default function StudentForm(props) {
 
     console.log(cloneType2);
 
-    // type2.map(e=>{
-    //   cloneType2  =
-    // })
-    // setCourseList(type2)
-
-    //    type2.map((e)=>{
-    //    console.log(e)
-    //   cloneType2 = [...cloneType2,e]
-    // //   newallCourses = allCourses.filter(course => course !== e)
-
-    //  })
+ 
 
     allcoursesField();
   }
 
   console.log(cloneType2);
 
-  const handleExtraCourseOnClick = useCallback(
-    (e) => {
-      var value = e.target.value;
-      console.log(e.target.value);
 
-      setExtraCourseList((extraCourseList) => [...extraCourseList, value]);
-    },
-    [extraCourseList]
-  );
+
+
+  const handleExtraCourseOnClick = (value)=>{
+  //  var value = e.target.value;
+  //  console.log(e.target.value);
+
+   setExtraCourseList((extraCourseList) => [...extraCourseList, value]);
+  }
 
   console.log(extraCourseList);
 
@@ -446,13 +461,7 @@ export default function StudentForm(props) {
     setExtraCourseList(extraCourseList.filter((a) => a !== value));
   };
 
-  // const handleAddExtracourse = (e)=>{
-  //   e.preventDefault()
-  //   var value = e.target.value
-  //   console.log(value)
-  //   setExtraCourseList(extraCourseList => [...extraCourseList,value] );
 
-  // }
 
   const handleRadioOnChange = (e) => {
     var value = e.target.value;
@@ -465,14 +474,7 @@ export default function StudentForm(props) {
     setEditorState(editorState.getCurrentContent().getPlainText());
   };
 
-  // const onRichEditorStateChange = useCallback(
-  //   (rawcontent) => {
-  //     setCheckEditorBox(true);
-  //     console.log(rawcontent);
-  //     // setEditorState(rawcontent.blocks[0].text);
-  //   },
-  //   [editorState]
-  // );
+
 
   const onEditorStateChange = (e) => [setEditorState(e.target.value)];
 
@@ -480,28 +482,7 @@ export default function StudentForm(props) {
     setSuspended(!suspended);
   };
 
-  // const handleAvgOnChange = (e)=>{
-  //   var value = e.target.value
-  //   setAvgGrade(value)
-  //   // setCourseList(courseList => [...courseList,value] );
 
-  // }
-
-  //convert file upload to base64
-  // const convertToBase64 = (file) => {
-  //   return new Promise((resolve, reject) => {
-  //     const fileReader = new FileReader();
-  //     fileReader.readAsDataURL(file);
-  //     fileReader.onload = () => {
-
-  //       setImageShow(fileReader.result);
-  //         resolve();
-  //     };
-  //     fileReader.onerror = (error) => {
-  //       reject(error);
-  //     };
-  //   });
-  // };
 
   const convertToBase64 = (file) => {
     console.log(file, "djjddj");
@@ -569,24 +550,7 @@ export default function StudentForm(props) {
 
         console.log("MEEE", value);
 
-        // NewCourses =  courseList.filter((a) => a !== value);
-        // setCourseList(NewCourses);
-        // var index = cloneType2.indexOf(value);
-        // if (index > -1) {
-        //   var update = delete cloneType2[index];
-        //   // cloneType2 = [update]
-        //   cloneType2.splice(index, 1);
-        // }
-        // console.log(cloneType2)
-        // return cloneType2;
-
-        // cloneType2[1] = value
-
-        // const clon =cloneType2.filter(a => {
-        //   console.log(a)
-        //   return a != value
-        // });
-        // console.log(cloneType2)
+  
       }
     },
     [cloneType2, collectCourseList]
@@ -699,6 +663,7 @@ export default function StudentForm(props) {
       }
     }
   };
+  
 
   useEffect(() => {
     console.log(majorfieldvalue);
@@ -706,7 +671,14 @@ export default function StudentForm(props) {
     console.log(collectCourseList);
   }, [majorfieldvalue, collectCourseList, cloneType2, editorState]);
 
-  console.log(extraCourseList, "hhhh");
+  console.log(majorfieldvalue, "hhhh");
+
+  function handleMajorFieldChange(value) {
+    console.log(`selected ${value}`);
+      setMajorfieldvalue(value);
+      console.log(majorfieldvalue);
+  
+  }
   return (
     <>
       {/* {!loading ? <>jj</> 
@@ -744,7 +716,9 @@ export default function StudentForm(props) {
             </div>
           )}
         </div>
-        <div>Update Students Record</div>
+        <div style={{display: 'flex', justifyContent: 'center'}} >
+          <div> <h3> <b>Update Student's Record</b></h3> </div>{" "}
+        </div>
         <div
           style={{
             display: "flex",
@@ -789,37 +763,30 @@ export default function StudentForm(props) {
             />
           </div>
 
-          {/* <div className="input-container">
-          <label className="parameter"> Password</label>
-          <input
-            type="text"
-            defaultValue={student && student.password}
-            // value={student && student.FullName}
-            placeholder="password"
-            onChange={handleFullnameOnChange}
-            required
-            // readonly="readonly"
-          />
-       
-        </div> */}
-
           <div>
             <div style={{ display: "flex", flexDirection: "row" }}>
               <label className="parameter">Password</label>
-              <input
-                type={showPassword ? "password" : "text"}
-                placeholder="password"
-                defaultValue={student && student.Password}
-                onChange={handlePasswordOnChange}
-                required
-              />
+              <div>
+                {" "}
+                <input
+                  type={showPassword ? "password" : "text"}
+                  placeholder="password"
+                  defaultValue={student && student.Password}
+                  onChange={handlePasswordOnChange}
+                  required
+                />
+              </div>
+
               {showPassword ? (
-                <div onClick={() => setshowPassword(!showPassword)}>
-                  <RiEye2Fill />
+                <div
+                  className="form-control"
+                  onClick={() => setshowPassword(!showPassword)}
+                >
+                  <RiEye2Fill style={{ fontSize: "30px" }} />
                 </div>
               ) : (
                 <div onClick={() => setshowPassword(!showPassword)}>
-                  <RiEye2Line />
+                  <RiEye2Line style={{ fontSize: "30px" }} />
                 </div>
               )}
             </div>
@@ -850,9 +817,6 @@ export default function StudentForm(props) {
           </div>
 
           <div className="input-container">
-            {/* <div>
-              <b>Current Degree</b>: {student && student.Degree}
-            </div> */}
             <legend className="parameter">Degree:</legend>
             <Radio.Group onChange={handleRadioOnChange} value={degree}>
               <Radio value="BA">BA</Radio>
@@ -864,45 +828,35 @@ export default function StudentForm(props) {
 
           <div className="input-container">
             <label className="parameter">Major Field of Study</label>
-            <select
-              onChange={majorFieldChangeHandler}
-              defaultValue={majorfieldvalue}
-              required
+
+            <Select
+              value={majorfieldvalue}
+              style={{ width: 120 }}
+              onChange={handleMajorFieldChange}
             >
-              {/* {console.log("fo", e)} */}
-              <option value="Science" key="1">
-                Science
-              </option>
-              <option value="Art" key="2">
-                Art
-              </option>
-              <option value="Commercial" key="3">
-                Commercial
-              </option>
-            </select>
+              <Option value="Science">Science</Option>
+              <Option value="Art">Art</Option>
+              <Option value="Commercial">Commercial</Option>
+            </Select>
           </div>
 
           <div className="input-container">
             <label className="parameter">Minor Field of Study</label>
-            <select
+
+            <Select
+              // defaultValue="select"
+              value={minorfieldvalue}
+              style={{ width: 120 }}
               onChange={handleMinorfieldOnChange}
-              defaultValue={minorfieldvalue}
-              required
             >
-              <option>select</option>
+              <Option value="select">select</Option>
               {options}
-            </select>
+            </Select>
           </div>
 
           <div className="showCourses">
             <div className="input-container">
               <label className="parameter"> Course List</label>
-              <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
-                <b> Current COurses</b>
-                {/* {console.log(student && student.Courses, "opop")} */}
-                {student &&
-                  student.Courses?.split(",").map((e) => <div>{e}</div>)}
-              </div>
 
               {type2 ? (
                 type2.map((el) => (
@@ -927,27 +881,21 @@ export default function StudentForm(props) {
             </div>
 
             <div>
-              {/* <label>Other</label> */}
               <div>
                 <label> Other Courses</label>
               </div>
 
-              {/* {student && student.AdCourses.map((e) => <div>e</div>)} */}
-              {/* <div style={{ marginBottom: "2rem", marginTop: "1rem" }}>
-                <b>Current Additional COurses</b>
-                {student &&
-                  student.AdCourses?.split(",").map((e) => <div>{e}</div>)}
-              </div> */}
-              <select
+              <Select
+                style={{ width: 120 }}
                 onChange={handleExtraCourseOnClick}
-                // value={student && student.AdCourses}
+                defaultValue="Select"
               >
-                <option value="" key="">
+                <Option value="" key="">
                   Select
-                </option>
+                </Option>
 
-                {newallCourses ? (
-                  newallCourses.map((e) => (
+                {allNewCoursesClone ? (
+                  allNewCoursesClone.map((e) => (
                     <option value={e} key={e}>
                       {e}
                     </option>
@@ -955,7 +903,7 @@ export default function StudentForm(props) {
                 ) : (
                   <div>&nbsp;</div>
                 )}
-              </select>
+              </Select>
               <div className="extraCourselist">
                 {extraCourseList &&
                   extraCourseList.map((e) => (
@@ -968,7 +916,6 @@ export default function StudentForm(props) {
                       >
                         Remove
                       </button>
-                      {/* <button value={e} onClick={handleAddExtracourse}>Add</button> */}
                     </div>
                   ))}
               </div>
@@ -984,20 +931,6 @@ export default function StudentForm(props) {
               <img style={{ height: "80px", width: "80px" }} src={imageShow} />
             )}
           </div>
-
-          {/* <div className="input-container">
-          <label className="parameter">Image</label>
-          <input type="file" onChange={fileSelectorHandler} />
-          {isSelected ? <p>Image selected</p> : <p>Image not yet selected</p>}
-        </div> */}
-
-          {/* <div className="input-container">
-           <label className="parameter" >Average Grade</label>
-           <label>
-                <input type="text" value={avgGrade} placeholder="average grade" onChange={handleAvgOnChange} required />
-             </label>
-          
-        </div> */}
 
           <div className="input-container">
             <label className="parameter">Suspended</label>
@@ -1015,7 +948,6 @@ export default function StudentForm(props) {
               <textarea
                 defaultValue={student && student.Comments}
                 className="areaText"
-                // value={comment}
                 onChange={handleCommentChange}
                 placeholder="teachers' comment"
               />
@@ -1025,25 +957,10 @@ export default function StudentForm(props) {
           <div className="Editor">
             <label>Teacher's REmark</label>
             <Editor
-              // defaultValue={student && student.Remark}
-              // defaultEditorState={`8ddkdkkd`}
               defaultEditorState={editorState}
               onEditorStateChange={onRichEditorStateChange}
             />
           </div>
-
-          {/* <div className="input-container">
-          <label className="parameter">Teacher's REmark</label>
-          <div>
-            <textarea
-              defaultValue={student && student.Remark}
-              className="areaText"
-              // value={comment}
-              onChange={onEditorStateChange}
-              placeholder="teachers' Remark"
-            />
-          </div>
-        </div> */}
 
           <button className="primary" type="submit">
             Update

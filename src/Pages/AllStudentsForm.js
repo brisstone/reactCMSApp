@@ -94,7 +94,7 @@ const history = useHistory();
           <Button
             onClick={() =>
               history.push({
-                pathname: "/student-form",
+                pathname: `/student-form/${record.id}`,
                 student: record,
               })
             }

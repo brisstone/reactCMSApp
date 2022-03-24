@@ -61,7 +61,7 @@ function App() {
                 path="/student-records"
                 component={StudentRecords}
               />
-              <PrivateRoute path="/student-form" component={StudentForm} />
+              <PrivateRoute path="/student-form/:studentid" component={StudentForm} />
               <PrivateRoute
                 path="/personal-student-form"
                 component={PersonalStudentForm}
