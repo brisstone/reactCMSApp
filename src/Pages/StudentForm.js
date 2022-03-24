@@ -20,7 +20,8 @@ import "draft-js/dist/Draft.css";
 import "../../node_modules/draft-js/dist/Draft.css";
 import "../../src/components/richeditor.css";
 import { Radio, Select } from "antd";
-
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 // import 'draft-js/dist/Draft.css';
 // import '../node_modules/draft-js/dist/Draft.css'
 
@@ -29,7 +30,7 @@ import { Base64 } from "js-base64";
 import Countdown from "antd/lib/statistic/Countdown";
 import Modal from "../components/modal/Modal";
 import BackButton from "../components/Button/BackButton";
-import { RiEye2Fill, RiEye2Line, RiEyeCloseLine } from "react-icons/ri";
+import { RiCheckboxCircleFill, RiEye2Fill, RiEye2Line, RiEyeCloseLine } from "react-icons/ri";
 import Spinner from "../components/spinner/Spinner";
 import Axios from "axios";
 import { useParams } from "react-router-dom";
@@ -103,6 +104,7 @@ export default function StudentForm(props) {
   const [student, setstudent] = useState();
   const [teacherEmail, setTeacherEmail] = useState("");
   const [data, setData] = useState()
+  const [showLoader, setshowLoader] = useState(false)
   // const [loading, setloading] = useState(initialState)
 
   console.log(props?.location?.student, "studentCuree");
@@ -118,6 +120,7 @@ console.log(studentid, 'hhdhd')
   useEffect(() => {
     // setsudoEmail(props.match.params.email)
     // console.log(sudoemail, 'jjjjjj')
+    setshowLoader(true)
     Temail = sessionStorage.getItem("token") || null;
     getStudentRecords(Temail);
 
@@ -129,12 +132,13 @@ console.log(studentid, 'hhdhd')
      setComment(student && student.Comments);
      setMinorfieldvalue(student && student.MinorFieldOfStudy);
      setMajorfieldvalue(student && student.MajorFieldOfStudy);
-
+    
      if (student && student.Suspended == 1) {
        setSuspended(true);
      } else {
        setSuspended(false);
      }
+     setshowLoader(false)
     
   }, []);
 
@@ -566,6 +570,7 @@ console.log(studentid, 'hhdhd')
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setshowLoader(true)
 
     console.log(degree);
 
@@ -606,17 +611,21 @@ console.log(studentid, 'hhdhd')
     }
 
     if (startYear.length < 4) {
+       setshowLoader(false);
       setErrorType(false);
       setIsOpen(true);
       setMessage("Start Year Length is less than 4");
     } else if (!degree) {
+       setshowLoader(false);
       setErrorType(false);
       setIsOpen(true);
       setMessage("Select Degree");
     } else if (minorfieldvalue.length === 0) {
+       setshowLoader(false);
       setErrorType(false);
       setMessage("Select Courses");
     } else if (extraCourseList.length === 0) {
+       setshowLoader(false);
       setErrorType(false);
       setMessage("Select Additional Courses");
     } else {
@@ -655,6 +664,7 @@ console.log(studentid, 'hhdhd')
           editedStudentUI
         );
         if (data.data[0].Success === "done") {
+           setshowLoader(false);
           setIsOpen(true)
           //  setIsOpen(true);
         
@@ -684,7 +694,28 @@ console.log(studentid, 'hhdhd')
   }
   return (
     <>
+      <div
+        className="text-center progress-bar progress-bar-striped progress-bar-animated badge"
+        style={{
+          backgroundColor: "#009ef7",
+          color: "#fff",
+          padding: "4px",
+          borderRadius: "20px",
+        }}
+      >
+      <RiCheckboxCircleFill style={{ color: "#7367F0" }} />
+      </div>
+
+     
+
+        {showLoader && <Box className="centered" sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box> }
+     
+
+      {/* <Circular */}
       {/* {!loading ? <>jj</> 
+    
       
       
       : <Spinner />} */}
@@ -719,8 +750,14 @@ console.log(studentid, 'hhdhd')
             </div>
           )}
         </div>
-        <div style={{display: 'flex', justifyContent: 'center'}} >
-          <div> <h3> <b>Update Student's Record</b></h3> </div>{" "}
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <div>
+            {" "}
+            <h3>
+              {" "}
+              <b>Update Student's Record</b>
+            </h3>{" "}
+          </div>{" "}
         </div>
         <div
           style={{
