@@ -521,19 +521,17 @@ console.log(studentid, 'hhdhd')
     (e) => {
       console.log(e.target.checked);
       var value = e.target.value;
-      // var checkboxchecked = e.target.checked
-
-      //uncheck the checkbox
+   
       setCheckState(false);
 
-      // setCourseList(cloneType2)
+     
 
       console.log(e.currentTarget);
       console.log(value);
       console.log(courseList);
 
       let NewCourses;
-      // e.target.checked = "false"
+   
       if (e.target.checked) {
         //remove checked course to collectcourselist, which later gets filtered out on based on cloneType2 button submission click
 
@@ -587,7 +585,7 @@ console.log(studentid, 'hhdhd')
       // setSelectedFile({ ...selectedFile, myFile: "empty,empty" });
       if (student.Picture) {
         console.log("112");
-        // setSelectedFile({ ...selectedFile, myFile: student.Picture });
+      
         console.log("117");
         image = {
           ...selectedFile,
@@ -657,6 +655,9 @@ console.log(studentid, 'hhdhd')
           editedStudentUI
         );
         if (data.data[0].Success === "done") {
+          setIsOpen(true)
+          //  setIsOpen(true);
+        
           setMessage("Sucessfully Uploaded..");
           // updateRecord()
         }
