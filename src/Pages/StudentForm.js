@@ -459,6 +459,8 @@ console.log(studentid, 'hhdhd')
     var value = e.target.value;
     console.log(value);
     setExtraCourseList(extraCourseList.filter((a) => a !== value));
+    setallNewCoursesClone(((allNewCoursesClone=> [...allNewCoursesClone, value])))
+    
   };
 
 
