@@ -1,7 +1,6 @@
 import Axios from "axios";
 import React, { useEffect, useState, Fragment } from "react";
-import { Button, Card, CardBody, Input, Row, 
- } from "reactstrap";
+import { Button, Card, CardBody, Input, Row } from "reactstrap";
 import BackButton from "../components/Button/BackButton";
 import EditableRow from "../components/tableDisplay/EditableRow";
 import ReadOnlyRow from "../components/tableDisplay/ReadOnlyRow";
@@ -13,36 +12,30 @@ import "antd/dist/antd.css";
 import { useHistory } from "react-router-dom";
 const { Option } = Select;
 
-
-
-
-const dataCLone= [
-      {
-         "id":1,
-         "Email":"teyo@gmail.com",
-         "Password":"9876",
-         "Adm":1,
-         "FullName":"Ezekiel Man",
-         "DateOfBirth":"1997-11-06",
-         "Picture":"empty",
-         "SchoolStartYear":"2011",
-         "MajorFieldOfStudy":"Science",
-         "MinorFieldOfStudy":"Physics",
-         "Courses":"Physics1,Physics2,Physics3",
-         "AdCourses":"Poet1,Law3",
-         "Average":null,
-         "Comments":null,
-         "Suspended":0,
-         "Remark":"empty",
-         "Degree":"BA"
-      },
-]
-
-
+const dataCLone = [
+  {
+    id: 1,
+    Email: "teyo@gmail.com",
+    Password: "9876",
+    Adm: 1,
+    FullName: "Ezekiel Man",
+    DateOfBirth: "1997-11-06",
+    Picture: "empty",
+    SchoolStartYear: "2011",
+    MajorFieldOfStudy: "Science",
+    MinorFieldOfStudy: "Physics",
+    Courses: "Physics1,Physics2,Physics3",
+    AdCourses: "Poet1,Law3",
+    Average: null,
+    Comments: null,
+    Suspended: 0,
+    Remark: "empty",
+    Degree: "BA",
+  },
+];
 
 export default function AllStudentsForm(props) {
-const history = useHistory();
-
+  const history = useHistory();
 
   const columns = [
     {
@@ -106,7 +99,6 @@ const history = useHistory();
     },
   ];
 
-  
   // const baseUrl = "http://localhost:8000";
   const baseUrl = "https://pythocmsapi.herokuapp.com";
 
@@ -119,8 +111,8 @@ const history = useHistory();
   const [message, setMessage] = useState("");
   const [searchMajorFieldIn, setsearchMajorFieldIn] = useState("");
   const [rawData, setrawData] = useState([]);
-  const [loading, setloading] = useState(false)
-  const [sourceData, setsourceData] = useState()
+  const [loading, setloading] = useState(false);
+  const [sourceData, setsourceData] = useState();
   // const [teacherEmail, setteacherEmail] = useState('')
 
   const [editFormData, setEditFormData] = useState({
@@ -182,81 +174,78 @@ const history = useHistory();
   };
 
   const handleMajorFieldSearch = async (value) => {
-    setloading(true)
+    setloading(true);
     console.log(value, "dkdkkd");
     setsearchMajorFieldIn(value);
-  //  console.log("I AM NOT ZERO");
-    if(data.length !== 0){
+    //  console.log("I AM NOT ZERO");
+    if (data.length !== 0) {
       console.log("I AM NOT ZERO");
-         if (value === "All") {
-           setloading(true);
-           console.log("hidksks");
+      if (value === "All") {
+        setloading(true);
+        console.log("hidksks");
 
-           setData(rawData);
-           setloading(false);
-         } else {
-           setData(
-             rawData &&
-               data.filter((s) =>
-                 s.MajorFieldOfStudy.toLowerCase().includes(value.toLowerCase())
-               )
-           );
-           setloading(false);
+        setData(rawData);
+        setloading(false);
+      } else {
+        setData(
+          rawData &&
+            data.filter((s) =>
+              s.MajorFieldOfStudy.toLowerCase().includes(value.toLowerCase())
+            )
+        );
+        setloading(false);
 
-           // const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
-           //   search: value,
-           // });
+        // const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
+        //   search: value,
+        // });
 
-           // // setData(data)
-           // console.log(data, "1ppppppppppp");
+        // // setData(data)
+        // console.log(data, "1ppppppppppp");
 
-           // if (data.data.length !== 0) {
-           //   console.log(data.data.userinfo[0].Email, "ksuyujsys");
-           //   if (data.data.userinfo[0].Email.includes("@")) {
-           //     console.log("jqqqqqqqqqqqqqqqqqqqwer");
-           //     setData(data.data.userinfo);
-           //     setloading(false)
-           //   }
-           // }
-         }
-    }else{
-
+        // if (data.data.length !== 0) {
+        //   console.log(data.data.userinfo[0].Email, "ksuyujsys");
+        //   if (data.data.userinfo[0].Email.includes("@")) {
+        //     console.log("jqqqqqqqqqqqqqqqqqqqwer");
+        //     setData(data.data.userinfo);
+        //     setloading(false)
+        //   }
+        // }
+      }
+    } else {
       console.log("I AM ZERO");
-      setData(rawData)
-         if (value === "All") {
-           setloading(true);
-           console.log("hidksks");
+      setData(rawData);
+      if (value === "All") {
+        setloading(true);
+        console.log("hidksks");
 
-           setData(rawData);
-           setloading(false);
-         } else {
-           setData(
-             rawData &&
-               rawData.filter((s) =>
-                 s.MajorFieldOfStudy.toLowerCase().includes(value.toLowerCase())
-               )
-           );
-           setloading(false);
+        setData(rawData);
+        setloading(false);
+      } else {
+        setData(
+          rawData &&
+            rawData.filter((s) =>
+              s.MajorFieldOfStudy.toLowerCase().includes(value.toLowerCase())
+            )
+        );
+        setloading(false);
 
-           // const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
-           //   search: value,
-           // });
+        // const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
+        //   search: value,
+        // });
 
-           // // setData(data)
-           // console.log(data, "1ppppppppppp");
+        // // setData(data)
+        // console.log(data, "1ppppppppppp");
 
-           // if (data.data.length !== 0) {
-           //   console.log(data.data.userinfo[0].Email, "ksuyujsys");
-           //   if (data.data.userinfo[0].Email.includes("@")) {
-           //     console.log("jqqqqqqqqqqqqqqqqqqqwer");
-           //     setData(data.data.userinfo);
-           //     setloading(false)
-           //   }
-           // }
-         }
+        // if (data.data.length !== 0) {
+        //   console.log(data.data.userinfo[0].Email, "ksuyujsys");
+        //   if (data.data.userinfo[0].Email.includes("@")) {
+        //     console.log("jqqqqqqqqqqqqqqqqqqqwer");
+        //     setData(data.data.userinfo);
+        //     setloading(false)
+        //   }
+        // }
+      }
     }
-
- 
 
     // if (data.data.userinfo.includes("@")){
 
@@ -273,7 +262,11 @@ const history = useHistory();
 
     console.log(data.data.userinfo, "1ppppppppppp");
     setrawData(data.data.userinfo);
-    setData(data.data.userinfo);
+    // console.log(data.data.userinfo.filter((e)=> e.Adm !== 1))
+    setData(data.data.userinfo.filter((e) => e.Adm !== 1));
+    // data
+    //                     .filter((e) => e.Adm !== 1)
+    //                     .map((student) => (
     setsourceData(data.data.userinfo);
     console.log(data.data.userinfo[0].Email, "1ppppppppppp");
   };
@@ -422,7 +415,7 @@ const history = useHistory();
     removeUserSession();
     props.history.push("/login");
   };
-  if(!loading){
+  if (!loading) {
     if (data && data) {
       return (
         <div className="student-record">
@@ -453,7 +446,7 @@ const history = useHistory();
                       display: "flex",
                       flexDirection: "row",
                       columnGap: "2rem",
-                      marginBottom: '2rem'
+                      marginBottom: "2rem",
                     }}
                   >
                     <Input
@@ -551,10 +544,8 @@ const history = useHistory();
         </div>
       );
     }
-  }else{
-    return(
-      <Spinner/>
-    )
+  } else {
+    return <Spinner />;
   }
   // if (data.length === 0) {
   //   return <div>
