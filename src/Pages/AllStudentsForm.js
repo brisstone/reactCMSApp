@@ -114,8 +114,8 @@ export default function AllStudentsForm(props) {
   const [rawData, setrawData] = useState([]);
   const [loading, setloading] = useState(false);
   const [sourceData, setsourceData] = useState();
-  const [checkSession, setcheckSession] = useState(true)
-  const [showLoader, setshowLoader] = useState(false)
+  const [checkSession, setcheckSession] = useState(false);
+  const [showLoader, setshowLoader] = useState(false);
   // const [teacherEmail, setteacherEmail] = useState('')
 
   const [editFormData, setEditFormData] = useState({
@@ -147,11 +147,10 @@ export default function AllStudentsForm(props) {
 
   const handleSearchText = async (e) => {
     setSearchInput(e.target.value);
-
   };
 
-  const handleSearch = async (e)=>{
-    setshowLoader(true)
+  const handleSearch = async (e) => {
+    setshowLoader(true);
     // const data = await Axios.post(`${baseUrl}/admsearch`, {
     //   search: searchInput,
     // });
@@ -185,7 +184,7 @@ export default function AllStudentsForm(props) {
     console.log(getCurrentDisplayedStu, "dsdjshjs");
 
     setData(getCurrentDisplayedStu);
-    setshowLoader(false)
+    setshowLoader(false);
 
     // var studentsRecords = JSON.parse(sessionStorage.students);
 
@@ -193,8 +192,7 @@ export default function AllStudentsForm(props) {
 
     //   console.log('jqqqqqqqqqqqqqqqqqqqwer')
     // }
-  }
-
+  };
 
   const handleMajorFieldSearch = async (value) => {
     setloading(true);
@@ -278,7 +276,7 @@ export default function AllStudentsForm(props) {
 
   useEffect(() => {
     //  setData(rawData);
-    console.log('DATA RERENDERED')
+    console.log("DATA RERENDERED");
   }, [data, rawData]);
 
   const getStudentRecords = async () => {
@@ -298,7 +296,7 @@ export default function AllStudentsForm(props) {
       setData(studentsRecords.filter((e) => e.Adm !== 1));
 
       setsourceData(data.data.userinfo);
-      setcheckSession(true)
+      setcheckSession(true);
     } else {
       console.log("nill");
       var studentsRecords = JSON.parse(sessionStorage.students);
@@ -306,10 +304,10 @@ export default function AllStudentsForm(props) {
     }
   };
 
-   useEffect(() => {
-     //  setData(rawData);
-     console.log("DATA RERENDE99");
-   }, [data, rawData]);
+  useEffect(() => {
+    //  setData(rawData);
+    console.log("DATA RERENDE99");
+  }, [data, rawData]);
 
   //when the edit button is clicked on the immutable table
   const handleEditClick = (event, student) => {
@@ -458,7 +456,7 @@ export default function AllStudentsForm(props) {
 
   const clearSession = async () => {
     await sessionStorage.removeItem("students");
-    setcheckSession(false)
+    setcheckSession(false);
     await getStudentRecords();
   };
   if (!loading) {
@@ -480,12 +478,7 @@ export default function AllStudentsForm(props) {
             />
           </div>
 
-          <div>
-            {" "}
-            <h4 style={{ Color: "red", fontWeight: "bold" }}>
-              INPUT COURSES AND ADDITIONAL COURSES SEPARATED BY COMMA
-            </h4>{" "}
-          </div>
+          <div></div>
           <div>{message}</div>
 
           <form onSubmit={handleEditFormSubmit}>
@@ -601,7 +594,7 @@ export default function AllStudentsForm(props) {
           </form>
         </div>
       );
-    }else{
+    } else {
       return (
         <Box className="centered" sx={{ display: "flex" }}>
           <CircularProgress />
