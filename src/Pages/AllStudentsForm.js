@@ -281,7 +281,7 @@ export default function AllStudentsForm(props) {
 
   const getStudentRecords = async () => {
 
-    setshowLoader(true)
+    setshowLoader(true);
     const data = await Axios.post(`${baseUrl}/getalluser`, {
       admemail: email || teacherEmail,
     });
@@ -313,7 +313,7 @@ export default function AllStudentsForm(props) {
       setData(studentsRecords.filter((e) => e.Adm !== 1));
     }
 
-    setshowLoader(false)
+    setshowLoader(false);
   };
 
   useEffect(() => {
@@ -475,9 +475,10 @@ export default function AllStudentsForm(props) {
   if (!loading) {
     if (data && data) {
       return (
-        <div className="student-record">
+        <div className="student-record" style={{position: 'relative'}}>
           {showLoader && (
-            <Box className="centered" sx={{ display: "flex" }}>
+          // <div>LOADING..........</div>
+            <Box className="" sx={{ display: "flex", }}>
               <CircularProgress />
             </Box>
           )}
@@ -619,7 +620,11 @@ export default function AllStudentsForm(props) {
       );
     }
   } else {
-    return <Spinner />;
+    return (
+      <Box className="centered" sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box>
+    );
   }
   // if (data.length === 0) {
   //   return <div>
