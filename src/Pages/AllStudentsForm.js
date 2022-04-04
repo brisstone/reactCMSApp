@@ -10,6 +10,7 @@ import { Select, Spin } from "antd";
 import { Table, Tag, Space } from "antd";
 import "antd/dist/antd.css";
 import { useHistory } from "react-router-dom";
+import { Box, CircularProgress } from "@mui/material";
 const { Option } = Select;
 
 const dataCLone = [
@@ -113,6 +114,8 @@ export default function AllStudentsForm(props) {
   const [rawData, setrawData] = useState([]);
   const [loading, setloading] = useState(false);
   const [sourceData, setsourceData] = useState();
+  const [checkSession, setcheckSession] = useState(true)
+  const [showLoader, setshowLoader] = useState(false)
   // const [teacherEmail, setteacherEmail] = useState('')
 
   const [editFormData, setEditFormData] = useState({
@@ -140,11 +143,15 @@ export default function AllStudentsForm(props) {
     console.log(email, "kkstttttttttt");
     setTeacherEmail(email);
     console.log(teacherEmail, "rrrrrrrrrrrrrrrrrooooooooooooooorrrrrrrrrrro");
-  }, [teacherEmail]);
+  }, [teacherEmail, checkSession]);
 
-  const handleSearch = async (e) => {
+  const handleSearchText = async (e) => {
     setSearchInput(e.target.value);
 
+  };
+
+  const handleSearch = async (e)=>{
+    setshowLoader(true)
     // const data = await Axios.post(`${baseUrl}/admsearch`, {
     //   search: searchInput,
     // });
@@ -159,19 +166,35 @@ export default function AllStudentsForm(props) {
     //     setData(data.data.userinfo);
     //   }
     // }
+    // var currentDisplayedStu = sessionStorage.setItem("students", JSON.stringify(data.data.userinfo));
+    var currentDisplayedStu = JSON.parse(sessionStorage.students);
 
-    setData(
-      rawData &&
-        data.filter((s) =>
-          s.Email.toLowerCase().includes(searchInput.toLowerCase())
-        )
-    );
+    console.log(currentDisplayedStu, "ewjkwjkwjw");
+    var storeRecords =
+      currentDisplayedStu &&
+      currentDisplayedStu.filter((s) =>
+        // console.log(s, "jjdjjdjddj")
+        s.Email.toLowerCase().includes(searchInput.toLowerCase())
+      );
+
+    console.log(storeRecords, "storeRec");
+
+    sessionStorage.setItem("students", JSON.stringify(storeRecords));
+
+    var getCurrentDisplayedStu = JSON.parse(sessionStorage.students);
+    console.log(getCurrentDisplayedStu, "dsdjshjs");
+
+    setData(getCurrentDisplayedStu);
+    setshowLoader(false)
+
+    // var studentsRecords = JSON.parse(sessionStorage.students);
 
     // if (data.data.userinfo.includes("@")){
 
     //   console.log('jqqqqqqqqqqqqqqqqqqqwer')
     // }
-  };
+  }
+
 
   const handleMajorFieldSearch = async (value) => {
     setloading(true);
@@ -255,21 +278,38 @@ export default function AllStudentsForm(props) {
 
   useEffect(() => {
     //  setData(rawData);
-  }, [data]);
+    console.log('DATA RERENDERED')
+  }, [data, rawData]);
 
   const getStudentRecords = async () => {
     const data = await Axios.post(`${baseUrl}/getalluser`, { admemail: email });
 
-    console.log(data.data.userinfo, "1ppppppppppp");
     setrawData(data.data.userinfo);
-    // console.log(data.data.userinfo.filter((e)=> e.Adm !== 1))
-    setData(data.data.userinfo.filter((e) => e.Adm !== 1));
-    // data
-    //                     .filter((e) => e.Adm !== 1)
-    //                     .map((student) => (
-    setsourceData(data.data.userinfo);
-    console.log(data.data.userinfo[0].Email, "1ppppppppppp");
+
+    var studentsRecords = sessionStorage.students;
+    console.log(checkSession, "checkSession");
+
+    if (!checkSession) {
+      console.log("yeah");
+
+      sessionStorage.setItem("students", JSON.stringify(data.data.userinfo));
+      var studentsRecords = JSON.parse(sessionStorage.students);
+
+      setData(studentsRecords.filter((e) => e.Adm !== 1));
+
+      setsourceData(data.data.userinfo);
+      setcheckSession(true)
+    } else {
+      console.log("nill");
+      var studentsRecords = JSON.parse(sessionStorage.students);
+      setData(studentsRecords.filter((e) => e.Adm !== 1));
+    }
   };
+
+   useEffect(() => {
+     //  setData(rawData);
+     console.log("DATA RERENDE99");
+   }, [data, rawData]);
 
   //when the edit button is clicked on the immutable table
   const handleEditClick = (event, student) => {
@@ -415,10 +455,21 @@ export default function AllStudentsForm(props) {
     removeUserSession();
     props.history.push("/login");
   };
+
+  const clearSession = async () => {
+    await sessionStorage.removeItem("students");
+    setcheckSession(false)
+    await getStudentRecords();
+  };
   if (!loading) {
     if (data && data) {
       return (
         <div className="student-record">
+          {showLoader && (
+            <Box className="centered" sx={{ display: "flex" }}>
+              <CircularProgress />
+            </Box>
+          )}
           <div className="log-out">
             <BackButton style={{ backgroundColor: "green" }} />
             <input
@@ -432,7 +483,7 @@ export default function AllStudentsForm(props) {
           <div>
             {" "}
             <h4 style={{ Color: "red", fontWeight: "bold" }}>
-              {/* INPUT COURSES AND ADDITIONAL COURSES SEPARATED BY COMMA */}
+              INPUT COURSES AND ADDITIONAL COURSES SEPARATED BY COMMA
             </h4>{" "}
           </div>
           <div>{message}</div>
@@ -453,8 +504,15 @@ export default function AllStudentsForm(props) {
                       placeholder="email search..."
                       style={{ height: "2rem", width: "15rem" }}
                       className="form-control"
-                      onChange={handleSearch}
+                      onChange={handleSearchText}
                     />
+                    <div>
+                      <Button onClick={handleSearch}>Search..</Button>
+                    </div>
+
+                    <div>
+                      <Button onClick={clearSession}>RESET Search</Button>
+                    </div>
                     <div>
                       {" "}
                       {/* <div>Major Courses</div> */}
@@ -542,6 +600,12 @@ export default function AllStudentsForm(props) {
             </CardBody>
           </form>
         </div>
+      );
+    }else{
+      return (
+        <Box className="centered" sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
       );
     }
   } else {

@@ -30,7 +30,12 @@ import { Base64 } from "js-base64";
 import Countdown from "antd/lib/statistic/Countdown";
 import Modal from "../components/modal/Modal";
 import BackButton from "../components/Button/BackButton";
-import { RiCheckboxCircleFill, RiEye2Fill, RiEye2Line, RiEyeCloseLine } from "react-icons/ri";
+import {
+  RiCheckboxCircleFill,
+  RiEye2Fill,
+  RiEye2Line,
+  RiEyeCloseLine,
+} from "react-icons/ri";
 import Spinner from "../components/spinner/Spinner";
 import Axios from "axios";
 import { useParams } from "react-router-dom";
@@ -43,7 +48,6 @@ var SHA256 = require("crypto-js/sha256");
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
 const { Option } = Select;
-
 
 export default function StudentForm(props) {
   // const baseUrl = "http://localhost:8000";
@@ -86,7 +90,6 @@ export default function StudentForm(props) {
     )
   );
 
-
   const [degree, setDegree] = useState("");
 
   const [checkState, setCheckState] = useState(true);
@@ -103,86 +106,72 @@ export default function StudentForm(props) {
   const [sudoemail, setsudoEmail] = useState("");
   const [student, setstudent] = useState();
   const [teacherEmail, setTeacherEmail] = useState("");
-  const [data, setData] = useState()
-  const [showLoader, setshowLoader] = useState(false)
+  const [data, setData] = useState();
+  const [showLoader, setshowLoader] = useState(false);
   // const [loading, setloading] = useState(initialState)
 
   console.log(props?.location?.student, "studentCuree");
 
+  const param = useParams();
+  const { studentid } = param;
 
-const param = useParams();
-const {studentid} = param
-
-console.log(studentid, 'hhdhd')
+  console.log(studentid, "hhdhd");
 
   var Temail;
 
   useEffect(() => {
     // setsudoEmail(props.match.params.email)
     // console.log(sudoemail, 'jjjjjj')
-    setshowLoader(true)
+    setshowLoader(true);
     Temail = sessionStorage.getItem("token") || null;
     getStudentRecords(Temail);
 
-   
-     // setstudent(props?.location?.student);
-     console.log(student && student.Remark, "sjsjsj");
-     setStartYear(student && student.SchoolStartYear);
-     setDegree(student && student.Degree);
-     setComment(student && student.Comments);
-     setMinorfieldvalue(student && student.MinorFieldOfStudy);
-     setMajorfieldvalue(student && student.MajorFieldOfStudy);
-    
-     if (student && student.Suspended == 1) {
-       setSuspended(true);
-     } else {
-       setSuspended(false);
-     }
-     setshowLoader(false)
-    
-  }, []);
-
-
-    const getStudentRecords = async (Temail) => {
-      const data = await Axios.post(`${baseUrl}/getalluser`, {
-        admemail: Temail,
-      });
-
-   
-      setstudent(
-        data.data.userinfo.filter((e) => `${e.id}` === `${studentid}`)[0]
-      );
-   
-      setData(data.data.userinfo);
-
-    };
-
-  useEffect(() => {
-
-     Temail = sessionStorage.getItem("token") || null;
-    getStudentRecords(Temail)
-
-
-
-     if(allNewCoursesClone.length===0){
-
- setExtraCourseList(student && student.AdCourses.split(",").map((e) => e));
-   setStartYear(student && student.SchoolStartYear);
-   setComment(student && student.Comments);
-   setDegree(student && student.Degree);
-   setMinorfieldvalue(student && student.MinorFieldOfStudy);
-   setMajorfieldvalue(student && student.MajorFieldOfStudy);
-     }
-   
-
-  
+    // setstudent(props?.location?.student);
+    console.log(student && student.Remark, "sjsjsj");
+    setStartYear(student && student.SchoolStartYear);
+    setDegree(student && student.Degree);
+    setComment(student && student.Comments);
+    setMinorfieldvalue(student && student.MinorFieldOfStudy);
+    setMajorfieldvalue(student && student.MajorFieldOfStudy);
 
     if (student && student.Suspended == 1) {
       setSuspended(true);
     } else {
       setSuspended(false);
     }
+    setshowLoader(false);
+  }, []);
 
+  const getStudentRecords = async (Temail) => {
+    const data = await Axios.post(`${baseUrl}/getalluser`, {
+      admemail: Temail,
+    });
+
+    setstudent(
+      data.data.userinfo.filter((e) => `${e.id}` === `${studentid}`)[0]
+    );
+
+    setData(data.data.userinfo);
+  };
+
+  useEffect(() => {
+    Temail = sessionStorage.getItem("token") || null;
+    getStudentRecords(Temail);
+
+    if (allNewCoursesClone.length === 0) {
+      setExtraCourseList(student && student.AdCourses.split(",").map((e) => e));
+      setStartYear(student && student.SchoolStartYear);
+      setComment(student && student.Comments);
+      setDegree(student && student.Degree);
+      setMinorfieldvalue(student && student.MinorFieldOfStudy);
+      setMajorfieldvalue(student && student.MajorFieldOfStudy);
+    }
+
+    if (student && student.Suspended == 1) {
+      setSuspended(true);
+    } else {
+      setSuspended(false);
+    }
   }, [student]);
 
   console.log(
@@ -193,7 +182,6 @@ console.log(studentid, 'hhdhd')
   );
 
   useEffect(() => {
-
     var emailp = sessionStorage.getItem("token") || null;
 
     setTeacherEmail(emailp);
@@ -216,8 +204,7 @@ console.log(studentid, 'hhdhd')
   const Law = ["Law1", "Law2", "Law3"];
   const Poet = ["Poet1", "Poet2", "Poet3"];
   const Singer = ["Singer1", "Singer2", "Singer3"];
-  const [allNewCoursesClone, setallNewCoursesClone] = useState([])
-
+  const [allNewCoursesClone, setallNewCoursesClone] = useState([]);
 
   var allCourses = [
     "Biology1",
@@ -290,9 +277,12 @@ console.log(studentid, 'hhdhd')
    * otherwise it will create a options iterable based on our array
    */
   if (type) {
-    options = type.map((el) =>  <option value={el} key={el}>{el}</option>);
+    options = type.map((el) => (
+      <option value={el} key={el}>
+        {el}
+      </option>
+    ));
   }
-
 
   console.log(newallCourses);
 
@@ -335,13 +325,9 @@ console.log(studentid, 'hhdhd')
     setFullname(value);
   };
 
-
-
   const handlePasswordOnChange = async (e) => {
     var value = e.target.value;
     // Encrypt
-
- 
 
     setPassword(Base64.encode(value));
     // setPassword(encryptedString)
@@ -367,23 +353,14 @@ console.log(studentid, 'hhdhd')
 
     //inserted to make the editor and image selection empty & prevent catch error of not been filled
     setEditorState("empty");
-  
 
     setStartYear(value.replace(/[^\d.]/gi, ""));
-
-
   };
 
-
-
-    function handleMinorfieldOnChange(value) {
-      console.log(`selected ${value}`);
-      setMinorfieldvalue(value);
-  
-    }
-
-
-  
+  function handleMinorfieldOnChange(value) {
+    console.log(`selected ${value}`);
+    setMinorfieldvalue(value);
+  }
 
   var newallCourses;
 
@@ -405,26 +382,22 @@ console.log(studentid, 'hhdhd')
   );
 
   useEffect(() => {
-     console.log(extraCourseList, "djdjelllpwwuwiw");
+    console.log(extraCourseList, "djdjelllpwwuwiw");
 
-     if(allNewCoursesClone.length===0){
-          extraCourseList &&
-            extraCourseList.map(
-              (e) =>
-                setallNewCoursesClone(newallCourses.filter((el) => el !== e))
-              // console.log(e, 'extral')
-            );
-
-     }else{
-        extraCourseList &&
-          extraCourseList.map(
-            (e) => setallNewCoursesClone(allNewCoursesClone.filter((el) => el !== e))
-            // console.log(e, 'extral')
-          );
-     }
-  
-  
-
+    if (allNewCoursesClone.length === 0) {
+      extraCourseList &&
+        extraCourseList.map(
+          (e) => setallNewCoursesClone(newallCourses.filter((el) => el !== e))
+          // console.log(e, 'extral')
+        );
+    } else {
+      extraCourseList &&
+        extraCourseList.map(
+          (e) =>
+            setallNewCoursesClone(allNewCoursesClone.filter((el) => el !== e))
+          // console.log(e, 'extral')
+        );
+    }
   }, [extraCourseList, newallCourses]);
   console.log(minorfieldvalue, "jogg");
   console.log(majorfieldvalue, "majorfieldvalue");
@@ -439,22 +412,17 @@ console.log(studentid, 'hhdhd')
 
     console.log(cloneType2);
 
- 
-
     allcoursesField();
   }
 
   console.log(cloneType2);
 
+  const handleExtraCourseOnClick = (value) => {
+    //  var value = e.target.value;
+    //  console.log(e.target.value);
 
-
-
-  const handleExtraCourseOnClick = (value)=>{
-  //  var value = e.target.value;
-  //  console.log(e.target.value);
-
-   setExtraCourseList((extraCourseList) => [...extraCourseList, value]);
-  }
+    setExtraCourseList((extraCourseList) => [...extraCourseList, value]);
+  };
 
   console.log(extraCourseList);
 
@@ -463,11 +431,11 @@ console.log(studentid, 'hhdhd')
     var value = e.target.value;
     console.log(value);
     setExtraCourseList(extraCourseList.filter((a) => a !== value));
-    setallNewCoursesClone(((allNewCoursesClone=> [...allNewCoursesClone, value])))
-    
+    setallNewCoursesClone((allNewCoursesClone) => [
+      ...allNewCoursesClone,
+      value,
+    ]);
   };
-
-
 
   const handleRadioOnChange = (e) => {
     var value = e.target.value;
@@ -480,15 +448,11 @@ console.log(studentid, 'hhdhd')
     setEditorState(editorState.getCurrentContent().getPlainText());
   };
 
-
-
   const onEditorStateChange = (e) => [setEditorState(e.target.value)];
 
   const handleSuspensionChange = () => {
     setSuspended(!suspended);
   };
-
-
 
   const convertToBase64 = (file) => {
     console.log(file, "djjddj");
@@ -525,17 +489,15 @@ console.log(studentid, 'hhdhd')
     (e) => {
       console.log(e.target.checked);
       var value = e.target.value;
-   
-      setCheckState(false);
 
-     
+      setCheckState(false);
 
       console.log(e.currentTarget);
       console.log(value);
       console.log(courseList);
 
       let NewCourses;
-   
+
       if (e.target.checked) {
         //remove checked course to collectcourselist, which later gets filtered out on based on cloneType2 button submission click
 
@@ -553,8 +515,6 @@ console.log(studentid, 'hhdhd')
         console.log(collectCourseList);
 
         console.log("MEEE", value);
-
-  
       }
     },
     [cloneType2, collectCourseList]
@@ -570,11 +530,11 @@ console.log(studentid, 'hhdhd')
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setshowLoader(true)
+    setshowLoader(true);
 
     console.log(degree);
 
-    var editorClone
+    var editorClone;
 
     console.log(extraCourseList, "lllll");
 
@@ -590,7 +550,7 @@ console.log(studentid, 'hhdhd')
       // setSelectedFile({ ...selectedFile, myFile: "empty,empty" });
       if (student.Picture) {
         console.log("112");
-      
+
         console.log("117");
         image = {
           ...selectedFile,
@@ -611,21 +571,21 @@ console.log(studentid, 'hhdhd')
     }
 
     if (startYear.length < 4) {
-       setshowLoader(false);
+      setshowLoader(false);
       setErrorType(false);
       setIsOpen(true);
       setMessage("Start Year Length is less than 4");
     } else if (!degree) {
-       setshowLoader(false);
+      setshowLoader(false);
       setErrorType(false);
       setIsOpen(true);
       setMessage("Select Degree");
     } else if (minorfieldvalue.length === 0) {
-       setshowLoader(false);
+      setshowLoader(false);
       setErrorType(false);
       setMessage("Select Courses");
     } else if (extraCourseList.length === 0) {
-       setshowLoader(false);
+      setshowLoader(false);
       setErrorType(false);
       setMessage("Select Additional Courses");
     } else {
@@ -664,10 +624,10 @@ console.log(studentid, 'hhdhd')
           editedStudentUI
         );
         if (data.data[0].Success === "done") {
-           setshowLoader(false);
-          setIsOpen(true)
+          setshowLoader(false);
+          setIsOpen(true);
           //  setIsOpen(true);
-        
+
           setMessage("Sucessfully Uploaded..");
           // updateRecord()
         }
@@ -676,7 +636,6 @@ console.log(studentid, 'hhdhd')
       }
     }
   };
-  
 
   useEffect(() => {
     console.log(majorfieldvalue);
@@ -688,9 +647,8 @@ console.log(studentid, 'hhdhd')
 
   function handleMajorFieldChange(value) {
     console.log(`selected ${value}`);
-      setMajorfieldvalue(value);
-      console.log(majorfieldvalue);
-  
+    setMajorfieldvalue(value);
+    console.log(majorfieldvalue);
   }
   return (
     <>
@@ -703,15 +661,14 @@ console.log(studentid, 'hhdhd')
           borderRadius: "20px",
         }}
       >
-      <RiCheckboxCircleFill style={{ color: "#7367F0" }} />
+        <RiCheckboxCircleFill style={{ color: "#7367F0" }} />
       </div>
 
-     
-
-        {showLoader && <Box className="centered" sx={{ display: "flex" }}>
-        <CircularProgress />
-      </Box> }
-     
+      {showLoader && (
+        <Box className="centered" sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      )}
 
       {/* <Circular */}
       {/* {!loading ? <>jj</> 
