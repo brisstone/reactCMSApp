@@ -280,28 +280,40 @@ export default function AllStudentsForm(props) {
   }, [data, rawData]);
 
   const getStudentRecords = async () => {
-    const data = await Axios.post(`${baseUrl}/getalluser`, { admemail: email });
+
+    setshowLoader(true)
+    const data = await Axios.post(`${baseUrl}/getalluser`, {
+      admemail: email || teacherEmail,
+    });
 
     setrawData(data.data.userinfo);
 
+    var getSessionState = await sessionStorage.checksession;
+
     var studentsRecords = sessionStorage.students;
-    console.log(checkSession, "checkSession");
+    console.log(getSessionState, "checkSession");
 
-    if (!checkSession) {
+    if (getSessionState === "false") {
       console.log("yeah");
-
+      // sessionStorage.setItem("checksession", false);
+      console.log(data.data.userinfo, 'dhjjsjs');
       sessionStorage.setItem("students", JSON.stringify(data.data.userinfo));
-      var studentsRecords = JSON.parse(sessionStorage.students);
+      var studentsRecords = await JSON.parse(sessionStorage.students);
 
       setData(studentsRecords.filter((e) => e.Adm !== 1));
 
       setsourceData(data.data.userinfo);
+      await sessionStorage.setItem("checksession", true);
+      var updatedSessionState = await sessionStorage.checksession;
+      console.log(updatedSessionState, "updatedSessionState");
       setcheckSession(true);
     } else {
       console.log("nill");
       var studentsRecords = JSON.parse(sessionStorage.students);
       setData(studentsRecords.filter((e) => e.Adm !== 1));
     }
+
+    setshowLoader(false)
   };
 
   useEffect(() => {
@@ -456,6 +468,7 @@ export default function AllStudentsForm(props) {
 
   const clearSession = async () => {
     await sessionStorage.removeItem("students");
+    sessionStorage.setItem("checksession", false);
     setcheckSession(false);
     await getStudentRecords();
   };
@@ -500,11 +513,15 @@ export default function AllStudentsForm(props) {
                       onChange={handleSearchText}
                     />
                     <div>
-                      <Button onClick={handleSearch}>Search..</Button>
+                      <Button className="form-control" onClick={handleSearch}>
+                        Search..
+                      </Button>
                     </div>
 
                     <div>
-                      <Button onClick={clearSession}>RESET Search</Button>
+                      <Button className="form-control" onClick={clearSession}>
+                        RESET Search
+                      </Button>
                     </div>
                     <div>
                       {" "}

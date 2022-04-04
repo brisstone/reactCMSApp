@@ -193,6 +193,7 @@ export default function Teacher(props) {
 
   useEffect(() => {
     setsudoEmail(props.match.params.email);
+    sessionStorage.setItem("checksession", false);
   }, []);
 
   useEffect(() => {
