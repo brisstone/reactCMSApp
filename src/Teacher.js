@@ -18,8 +18,7 @@ import "draft-js/dist/Draft.css";
 import "../node_modules/draft-js/dist/Draft.css";
 import "../src/components/richeditor.css";
 
-// import 'draft-js/dist/Draft.css';
-// import '../node_modules/draft-js/dist/Draft.css'
+import {Api} from "./Utils/Api";
 
 import "./index.css";
 import { Base64 } from "js-base64";
@@ -35,8 +34,8 @@ const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
 
 export default function Teacher(props) {
-  // const baseUrl = 'http://localhost:8000'
-  const baseUrl = "https://pythocmsapi.herokuapp.com";
+
+  const baseUrl = Api;
 
   const user = getUser();
 
@@ -441,7 +440,7 @@ export default function Teacher(props) {
       setErrorType(false);
       setMessage("Select Additional Courses");
     } else {
-      // https://pythocmsapi.herokuapp.com
+      
 
       axios
         .post(`${baseUrl}/admregister`, {

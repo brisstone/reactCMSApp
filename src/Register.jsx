@@ -3,11 +3,12 @@ import index from './index.css'
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import { setUserSession } from './Utils/Common';
+import { Api } from './Utils/Api';
 
 export default function Register(props) {
 
 
-  const baseUrl = 'https://pythocmsapi.herokuapp.com'
+  const baseUrl = Api
 
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState('');

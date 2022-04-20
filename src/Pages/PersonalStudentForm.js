@@ -27,6 +27,7 @@ import Countdown from "antd/lib/statistic/Countdown";
 import Modal from "../components/modal/Modal";
 import BackButton from "../components/Button/BackButton";
 import Axios from "axios";
+import { Api } from "../Utils/Api";
 
 // import Base64 from 'crypto-js/enc-base64';
 var CryptoJS = require("crypto-js");
@@ -36,9 +37,10 @@ var SHA256 = require("crypto-js/sha256");
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
 
+
 export default function PersonalStudentForm(props) {
-  // const baseUrl = 'http://localhost:8000'
-  const baseUrl = "https://pythocmsapi.herokuapp.com";
+ 
+  const baseUrl = Api;
 
   const user = getUser();
 
@@ -270,18 +272,7 @@ export default function PersonalStudentForm(props) {
     setFullname(value);
   };
 
-  // const convertToBase64 = (file) => {
-  //       return new Promise((resolve, reject) => {
-  //         const fileReader = new FileReader();
-  //         fileReader.readAsDataURL(file);
-  //         fileReader.onload = () => {
-  //           resolve(fileReader.result);
-  //         };
-  //         fileReader.onerror = (error) => {
-  //           reject(error);
-  //         };
-  //       });
-  //     };
+
 
   const handlePasswordOnChange = async (e) => {
     var value = e.target.value;

@@ -11,6 +11,8 @@ import { Table, Tag, Space } from "antd";
 import "antd/dist/antd.css";
 import { useHistory } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
+
+import {Api} from "../Utils/Api";
 const { Option } = Select;
 
 const dataCLone = [
@@ -101,8 +103,8 @@ export default function AllStudentsForm(props) {
   ];
 
   
-  const baseUrl = "https://pythocmsapi.herokuapp.com";
-  const api
+  const baseUrl = Api;
+  
 
   const [teacherEmail, setTeacherEmail] = useState("");
 

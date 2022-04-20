@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { setUserSession } from './Utils/Common';
 import { GET_USER } from './redux/constants';
-// import EditorConvertToText from './components/EditorConvertToText';
-// import MyEditor from './components/Editor';
+import {Api} from './Utils/Api';
+
 
 
 function Login(props) {
 
 
-  // const baseUrl = 'http://localhost:8000'
-  const baseUrl = 'https://pythocmsapi.herokuapp.com'
+  const baseUrl = Api
 
   const [loading, setLoading] = useState(false);
   const username = useFormInput('');

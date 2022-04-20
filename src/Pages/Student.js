@@ -5,10 +5,10 @@ import { Button, Card, CardBody, Input, Row, Table } from "reactstrap";
 import EditableRow2 from "../components/studentForm/EditableRow2";
 import ReadOnlyRow2 from "../components/studentForm/ReadOnlyRow2";
 import { getUser, removeUserSession } from "../Utils/Common";
-
+import {Api} from "../Utils/Api";
 export default function Student(props) {
-  // const baseUrl = 'http://localhost:8000'
-  const baseUrl = "https://pythocmsapi.herokuapp.com";
+
+  const baseUrl = Api;
 
   // const [sudoemail, setsudoEmail] = useState('')
   const [data, setData] = useState([]);

@@ -231,11 +231,9 @@ background-color: 'red';
 
 
 .log-out-btn:hover{
-  background-color: #cc6e78(85, 134, 240);
+  background-color: brown;
   color: black;
-  /* padding: 0rem 1rem;
-  font-size: 1rem;
-  font-weight: 900; */
+
   
 }
 

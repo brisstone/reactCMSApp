@@ -39,6 +39,7 @@ import {
 import Spinner from "../components/spinner/Spinner";
 import Axios from "axios";
 import { useParams } from "react-router-dom";
+import { Api } from "../Utils/Api";
 
 // import Base64 from 'crypto-js/enc-base64';
 var CryptoJS = require("crypto-js");
@@ -49,9 +50,10 @@ const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
 const { Option } = Select;
 
+
 export default function StudentForm(props) {
-  // const baseUrl = "http://localhost:8000";
-  const baseUrl = "https://pythocmsapi.herokuapp.com";
+
+  const baseUrl = Api;
 
   const user = getUser();
 
