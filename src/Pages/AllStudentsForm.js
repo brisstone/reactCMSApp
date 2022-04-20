@@ -100,8 +100,9 @@ export default function AllStudentsForm(props) {
     },
   ];
 
-  // const baseUrl = "http://localhost:8000";
+  
   const baseUrl = "https://pythocmsapi.herokuapp.com";
+  const api
 
   const [teacherEmail, setTeacherEmail] = useState("");
 
@@ -129,20 +130,13 @@ export default function AllStudentsForm(props) {
     Degree: "",
   });
 
-  // useEffect(() => {
-
-  // }, [])
-
   var email;
 
   useEffect(() => {
-    // setsudoEmail(props.match.params.email)
-    // console.log(sudoemail, 'jjjjjj')
     email = sessionStorage.getItem("token") || null;
     getStudentRecords(email);
-    console.log(email, "kkstttttttttt");
+
     setTeacherEmail(email);
-    console.log(teacherEmail, "rrrrrrrrrrrrrrrrrooooooooooooooorrrrrrrrrrro");
   }, [teacherEmail, checkSession]);
 
   const handleSearchText = async (e) => {
@@ -151,59 +145,31 @@ export default function AllStudentsForm(props) {
 
   const handleSearch = async (e) => {
     setshowLoader(true);
-    // const data = await Axios.post(`${baseUrl}/admsearch`, {
-    //   search: searchInput,
-    // });
 
-    // // setData(data)
-    // console.log(data, "1ppppppppppp");
-
-    // if (data.data.length !== 0) {
-    //   console.log(data.data.userinfo[0].Email, "ksuyujsys");
-    //   if (data.data.userinfo[0].Email.includes("@")) {
-    //     console.log("jqqqqqqqqqqqqqqqqqqqwer");
-    //     setData(data.data.userinfo);
-    //   }
-    // }
-    // var currentDisplayedStu = sessionStorage.setItem("students", JSON.stringify(data.data.userinfo));
     var currentDisplayedStu = JSON.parse(sessionStorage.students);
 
-    console.log(currentDisplayedStu, "ewjkwjkwjw");
     var storeRecords =
       currentDisplayedStu &&
       currentDisplayedStu.filter((s) =>
-        // console.log(s, "jjdjjdjddj")
         s.Email.toLowerCase().includes(searchInput.toLowerCase())
       );
-
-    console.log(storeRecords, "storeRec");
 
     sessionStorage.setItem("students", JSON.stringify(storeRecords));
 
     var getCurrentDisplayedStu = JSON.parse(sessionStorage.students);
-    console.log(getCurrentDisplayedStu, "dsdjshjs");
 
     setData(getCurrentDisplayedStu);
     setshowLoader(false);
-
-    // var studentsRecords = JSON.parse(sessionStorage.students);
-
-    // if (data.data.userinfo.includes("@")){
-
-    //   console.log('jqqqqqqqqqqqqqqqqqqqwer')
-    // }
   };
 
   const handleMajorFieldSearch = async (value) => {
     setloading(true);
-    console.log(value, "dkdkkd");
+
     setsearchMajorFieldIn(value);
-    //  console.log("I AM NOT ZERO");
+
     if (data.length !== 0) {
-      console.log("I AM NOT ZERO");
       if (value === "All") {
         setloading(true);
-        console.log("hidksks");
 
         setData(rawData);
         setloading(false);
@@ -215,29 +181,11 @@ export default function AllStudentsForm(props) {
             )
         );
         setloading(false);
-
-        // const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
-        //   search: value,
-        // });
-
-        // // setData(data)
-        // console.log(data, "1ppppppppppp");
-
-        // if (data.data.length !== 0) {
-        //   console.log(data.data.userinfo[0].Email, "ksuyujsys");
-        //   if (data.data.userinfo[0].Email.includes("@")) {
-        //     console.log("jqqqqqqqqqqqqqqqqqqqwer");
-        //     setData(data.data.userinfo);
-        //     setloading(false)
-        //   }
-        // }
       }
     } else {
-      console.log("I AM ZERO");
       setData(rawData);
       if (value === "All") {
         setloading(true);
-        console.log("hidksks");
 
         setData(rawData);
         setloading(false);
@@ -249,38 +197,13 @@ export default function AllStudentsForm(props) {
             )
         );
         setloading(false);
-
-        // const data = await Axios.post(`${baseUrl}/admmajorsearch`, {
-        //   search: value,
-        // });
-
-        // // setData(data)
-        // console.log(data, "1ppppppppppp");
-
-        // if (data.data.length !== 0) {
-        //   console.log(data.data.userinfo[0].Email, "ksuyujsys");
-        //   if (data.data.userinfo[0].Email.includes("@")) {
-        //     console.log("jqqqqqqqqqqqqqqqqqqqwer");
-        //     setData(data.data.userinfo);
-        //     setloading(false)
-        //   }
-        // }
       }
     }
-
-    // if (data.data.userinfo.includes("@")){
-
-    //   console.log('jqqqqqqqqqqqqqqqqqqqwer')
-    // }
   };
 
-  useEffect(() => {
-    //  setData(rawData);
-    console.log("DATA RERENDERED");
-  }, [data, rawData]);
+  useEffect(() => {}, [data, rawData]);
 
   const getStudentRecords = async () => {
-
     setshowLoader(true);
     const data = await Axios.post(`${baseUrl}/getalluser`, {
       admemail: email || teacherEmail,
@@ -291,12 +214,8 @@ export default function AllStudentsForm(props) {
     var getSessionState = await sessionStorage.checksession;
 
     var studentsRecords = sessionStorage.students;
-    console.log(getSessionState, "checkSession");
 
     if (getSessionState === "false") {
-      console.log("yeah");
-      // sessionStorage.setItem("checksession", false);
-      console.log(data.data.userinfo, 'dhjjsjs');
       sessionStorage.setItem("students", JSON.stringify(data.data.userinfo));
       var studentsRecords = await JSON.parse(sessionStorage.students);
 
@@ -305,10 +224,9 @@ export default function AllStudentsForm(props) {
       setsourceData(data.data.userinfo);
       await sessionStorage.setItem("checksession", true);
       var updatedSessionState = await sessionStorage.checksession;
-      console.log(updatedSessionState, "updatedSessionState");
+
       setcheckSession(true);
     } else {
-      console.log("nill");
       var studentsRecords = JSON.parse(sessionStorage.students);
       setData(studentsRecords.filter((e) => e.Adm !== 1));
     }
@@ -316,10 +234,7 @@ export default function AllStudentsForm(props) {
     setshowLoader(false);
   };
 
-  useEffect(() => {
-    //  setData(rawData);
-    console.log("DATA RERENDE99");
-  }, [data, rawData]);
+  useEffect(() => {}, [data, rawData]);
 
   //when the edit button is clicked on the immutable table
   const handleEditClick = (event, student) => {
@@ -359,18 +274,8 @@ export default function AllStudentsForm(props) {
   const handleEditFormSubmit = (event) => {
     event.preventDefault();
 
-    // if(editFormData.Courses.includes(',')){
-    //     console.log('naaaaaaaaaaaaaaaadddd')
-
-    // }
-
     var Courses;
     if (editFormData.Courses) {
-      console.log(
-        editFormData.Courses,
-        "jsiuuuuu",
-        typeof editFormData.Courses
-      );
       if (editFormData.Courses.length) {
         Courses = editFormData.Courses.split(",");
         Courses = [...Courses];
@@ -418,23 +323,17 @@ export default function AllStudentsForm(props) {
       admemail: teacherEmail,
     };
 
-    // JSON.stringify(AdCourses)
-    // JSON.stringify(Courses)
-
-    console.log(editedStudent, "jjjjjjjjjjjjhhhhhhh");
-
     //update student record
     updateStudentRecord(editedStudent, teacherEmail);
 
     const newData = [...data];
 
     const index = data.findIndex((student) => student.id === editStudentID);
-    console.log(index, "indexxxxxxx");
 
     newData[index] = editedStudentUI;
 
     setData(newData);
-    console.log(data, "iiiiiiiiii");
+
     seteditStudentID(null);
   };
 
@@ -443,13 +342,11 @@ export default function AllStudentsForm(props) {
 
     setUpdateData([...updateData, editedStudent, email]);
     try {
-      console.log(email, "kkkkkjuiuiy");
       const update = await Axios.post(
         `${baseUrl}/updatestudentinfo`,
         editedStudent
       );
-      console.log(update.data, "updateddddddd");
-      console.log(update.data, "jsjkjs");
+
       if (update.data[0].Success === "done") {
         setMessage("Sucessfully Uploaded..");
       } else {
@@ -475,10 +372,10 @@ export default function AllStudentsForm(props) {
   if (!loading) {
     if (data && data) {
       return (
-        <div className="student-record" style={{position: 'relative'}}>
+        <div className="student-record" style={{ position: "relative" }}>
           {showLoader && (
-          // <div>LOADING..........</div>
-            <Box className="" sx={{ display: "flex", }}>
+            // <div>LOADING..........</div>
+            <Box className="" sx={{ display: "flex" }}>
               <CircularProgress />
             </Box>
           )}

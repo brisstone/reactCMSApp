@@ -1,0 +1,1 @@
+export default Api = "https://pythocmsapi.herokuapp.com";

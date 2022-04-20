@@ -110,24 +110,20 @@ export default function StudentForm(props) {
   const [showLoader, setshowLoader] = useState(false);
   // const [loading, setloading] = useState(initialState)
 
-  console.log(props?.location?.student, "studentCuree");
-
   const param = useParams();
   const { studentid } = param;
-
-  console.log(studentid, "hhdhd");
 
   var Temail;
 
   useEffect(() => {
     // setsudoEmail(props.match.params.email)
-    // console.log(sudoemail, 'jjjjjj')
+
     setshowLoader(true);
     Temail = sessionStorage.getItem("token") || null;
     getStudentRecords(Temail);
 
     // setstudent(props?.location?.student);
-    console.log(student && student.Remark, "sjsjsj");
+
     setStartYear(student && student.SchoolStartYear);
     setDegree(student && student.Degree);
     setComment(student && student.Comments);
@@ -174,18 +170,10 @@ export default function StudentForm(props) {
     }
   }, [student]);
 
-  console.log(
-    student,
-    minorfieldvalue,
-    student && student.MinorFieldOfStudy,
-    "kkkkkkkkj"
-  );
-
   useEffect(() => {
     var emailp = sessionStorage.getItem("token") || null;
 
     setTeacherEmail(emailp);
-    console.log(teacherEmail, "rrrrrrrrrrrrrrrrrooooooooooooooorrrrrrrrrrro");
   }, [teacherEmail]);
 
   var Stor = false;
@@ -284,8 +272,6 @@ export default function StudentForm(props) {
     ));
   }
 
-  console.log(newallCourses);
-
   var color;
   //Modal color
   if (errorType) {
@@ -312,8 +298,6 @@ export default function StudentForm(props) {
 
   function majorFieldChangeHandler(event) {
     setMajorfieldvalue(event.target.value);
-    console.log(majorfieldvalue);
-    console.log(event.target);
   }
 
   const handleCommentChange = (e) => {
@@ -330,10 +314,6 @@ export default function StudentForm(props) {
     // Encrypt
 
     setPassword(Base64.encode(value));
-    // setPassword(encryptedString)
-
-    // setPassword(value)
-    console.log(password);
   };
 
   const handleEmailOnChange = (e) => {
@@ -358,7 +338,6 @@ export default function StudentForm(props) {
   };
 
   function handleMinorfieldOnChange(value) {
-    console.log(`selected ${value}`);
     setMinorfieldvalue(value);
   }
 
@@ -366,70 +345,59 @@ export default function StudentForm(props) {
 
   useEffect(() => {
     newallCourses = student && student.Courses;
-    //  console.log()
-    console.log(newallCourses, student && student.Courses, "kiiiiiiiuu");
   }, [student]);
 
-  console.log(newallCourses, "kkjkuuiuiu");
   const allcoursesField = useCallback(
     (e) => {
-      console.log(type2);
-
-      console.log(newallCourses);
       newallCourses = allCourses.filter((el) => !type2.includes(el));
     },
     [type2]
   );
 
   useEffect(() => {
-    console.log(extraCourseList, "djdjelllpwwuwiw");
-
     if (allNewCoursesClone.length === 0) {
       extraCourseList &&
         extraCourseList.map(
           (e) => setallNewCoursesClone(newallCourses.filter((el) => el !== e))
-          // console.log(e, 'extral')
+        
         );
     } else {
       extraCourseList &&
         extraCourseList.map(
           (e) =>
             setallNewCoursesClone(allNewCoursesClone.filter((el) => el !== e))
-          // console.log(e, 'extral')
+         
         );
     }
   }, [extraCourseList, newallCourses]);
-  console.log(minorfieldvalue, "jogg");
-  console.log(majorfieldvalue, "majorfieldvalue");
 
-  console.log(cloneType2);
 
   if (type2) {
     Stor = true;
 
-    console.log(type2);
+  
     cloneType2 = [...new Set(type2)];
 
-    console.log(cloneType2);
+   
 
     allcoursesField();
   }
 
-  console.log(cloneType2);
+
 
   const handleExtraCourseOnClick = (value) => {
     //  var value = e.target.value;
-    //  console.log(e.target.value);
+   
 
     setExtraCourseList((extraCourseList) => [...extraCourseList, value]);
   };
 
-  console.log(extraCourseList);
+ 
 
   const handleDeleteExtracourse = (e) => {
     e.preventDefault();
     var value = e.target.value;
-    console.log(value);
+   
     setExtraCourseList(extraCourseList.filter((a) => a !== value));
     setallNewCoursesClone((allNewCoursesClone) => [
       ...allNewCoursesClone,
@@ -443,8 +411,6 @@ export default function StudentForm(props) {
   };
 
   const onRichEditorStateChange = (editorState) => {
-    console.log(editorState, "waha;a");
-    console.log(editorState.getCurrentContent().getPlainText(), "djjdjd");
     setEditorState(editorState.getCurrentContent().getPlainText());
   };
 
@@ -455,7 +421,6 @@ export default function StudentForm(props) {
   };
 
   const convertToBase64 = (file) => {
-    console.log(file, "djjddj");
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(file);
@@ -472,14 +437,11 @@ export default function StudentForm(props) {
   };
 
   const fileSelectorHandler = async (e) => {
-    console.log("oipi");
-    console.log(e.target.files[0]);
     const file = e.target.files[0];
 
     const base64 = await convertToBase64(file);
     setSelectedFile({ ...selectedFile, myFile: base64 });
 
-    console.log(selectedFile, "lkkkss");
     setIsSelected(true);
   };
 
@@ -487,14 +449,9 @@ export default function StudentForm(props) {
 
   const handleOnChange = useCallback(
     (e) => {
-      console.log(e.target.checked);
       var value = e.target.value;
 
       setCheckState(false);
-
-      console.log(e.currentTarget);
-      console.log(value);
-      console.log(courseList);
 
       let NewCourses;
 
@@ -504,23 +461,17 @@ export default function StudentForm(props) {
         NewCourses = collectCourseList.filter((a) => a !== value);
         setCollectCourseList(NewCourses);
         // setCourseList(NewCourses);
-        console.log("mik");
       } else if (!e.target.checked) {
         //add unchecked course to collectcourselist, which later gets filtered out on button submission click
-        console.log("llllllll", courseList);
+
         setCollectCourseList((collectCourseList) => [
           ...collectCourseList,
           value,
         ]);
-        console.log(collectCourseList);
-
-        console.log("MEEE", value);
       }
     },
     [cloneType2, collectCourseList]
   );
-
-  console.log(courseList);
 
   const config = {
     headers: {
@@ -532,11 +483,7 @@ export default function StudentForm(props) {
     e.preventDefault();
     setshowLoader(true);
 
-    console.log(degree);
-
     var editorClone;
-
-    console.log(extraCourseList, "lllll");
 
     //filter to get the unchecked courselist (i.e wanted courses)
     let selectedCourse = cloneType2.filter(
@@ -544,28 +491,21 @@ export default function StudentForm(props) {
     );
 
     var image = {};
-    console.log(selectedFile, "mdddd");
+
     if (selectedFile.myFile === "") {
-      console.log("111");
       // setSelectedFile({ ...selectedFile, myFile: "empty,empty" });
       if (student.Picture) {
-        console.log("112");
-
-        console.log("117");
         image = {
           ...selectedFile,
           myFile: `data:image/jpeg;base64,${student.Picture}`,
         };
       } else {
-        console.log("113");
         //  setSelectedFile({ ...selectedFile, myFile: "empty,empty" });
         image = { ...selectedFile, myFile: "empty,empty" };
-        console.log("114");
       }
     }
 
     if (editorState._immutable) {
-      console.log("111");
       setEditorState("noComment");
       editorClone = student?.Remark;
     }
@@ -589,10 +529,6 @@ export default function StudentForm(props) {
       setErrorType(false);
       setMessage("Select Additional Courses");
     } else {
-      // https://pythocmsapi.herokuapp.com
-
-      console.log(suspended, "jdjjdjd");
-
       const editedStudentUI = {
         id: student.id,
         Email: student.Email,
@@ -631,24 +567,16 @@ export default function StudentForm(props) {
           setMessage("Sucessfully Uploaded..");
           // updateRecord()
         }
-      } catch (err) {
-        console.log(err, "kssks");
-      }
+      } catch (err) {}
     }
   };
 
   useEffect(() => {
-    console.log(majorfieldvalue);
-    console.log(courseList);
-    console.log(collectCourseList);
+
   }, [majorfieldvalue, collectCourseList, cloneType2, editorState]);
 
-  console.log(majorfieldvalue, "hhhh");
-
   function handleMajorFieldChange(value) {
-    console.log(`selected ${value}`);
     setMajorfieldvalue(value);
-    console.log(majorfieldvalue);
   }
   return (
     <>
@@ -677,16 +605,6 @@ export default function StudentForm(props) {
       
       : <Spinner />} */}
       <div className="teacher">
-        {/* {user.name}! */}
-        {/* Welcome Teacher: {user} <br />
-      <br /> */}
-        {console.log(user)}
-        {/* <input
-        type="button"
-        className="removeBtn"
-        onClick={handleViewStudentS}
-        value="View Student Records"
-      /> */}
         <BackButton />
         <input
           type="button"

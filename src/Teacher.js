@@ -176,12 +176,7 @@ export default function Teacher(props) {
     options = type.map((el) => <option key={el}>{el}</option>);
   }
 
-  // const newallCourses = type2.forEach((e)=>{
-  //   allCourses.filter(course => course !== e)
-  // })
-
-  // console.log(type2)
-  console.log(newallCourses);
+;
 
   var color;
   //Modal color
@@ -215,8 +210,7 @@ export default function Teacher(props) {
 
   function majorFieldChangeHandler(event) {
     setMajorfieldvalue(event.target.value);
-    console.log(majorfieldvalue);
-    console.log(event.target);
+  
   }
 
   const handleCommentChange = (e) => {
@@ -255,10 +249,7 @@ export default function Teacher(props) {
     // const encryptedString = cryptr.encrypt(value);
 
     setPassword(Base64.encode(value));
-    // setPassword(encryptedString)
-
-    // setPassword(value)
-    console.log(password);
+  
   };
 
   const handleEmailOnChange = (e) => {
@@ -294,67 +285,48 @@ export default function Teacher(props) {
   var newallCourses;
   const allcoursesField = useCallback(
     (e) => {
-      console.log(type2);
-
-      console.log(newallCourses);
+    
       newallCourses = allCourses.filter((el) => !type2.includes(el));
     },
     [type2]
   );
 
-  console.log(cloneType2);
+
 
   if (type2) {
     Stor = true;
 
-    console.log(type2);
+  
     cloneType2 = [...new Set(type2)];
 
-    console.log(cloneType2);
+  
 
-    // type2.map(e=>{
-    //   cloneType2  =
-    // })
-    // setCourseList(type2)
-
-    //    type2.map((e)=>{
-    //    console.log(e)
-    //   cloneType2 = [...cloneType2,e]
-    // //   newallCourses = allCourses.filter(course => course !== e)
-
-    //  })
 
     allcoursesField();
   }
 
-  console.log(cloneType2);
+
 
   const handleExtraCourseOnClick = useCallback(
     (e) => {
       var value = e.target.value;
-      console.log(e.target.value);
+   
 
       setExtraCourseList((extraCourseList) => [...extraCourseList, value]);
     },
     [extraCourseList]
   );
 
-  console.log(extraCourseList);
+
 
   const handleDeleteExtracourse = (e) => {
     e.preventDefault();
     var value = e.target.value;
-    console.log(value);
+  
     setExtraCourseList(extraCourseList.filter((a) => a !== value));
   };
 
-  // const handleAddExtracourse = (e)=>{
-  //   e.preventDefault()
-  //   var value = e.target.value
-  //   console.log(value)
-  //   setExtraCourseList(extraCourseList => [...extraCourseList,value] );
 
-  // }
 
   const handleRadioOnChange = (e) => {
     var value = e.target.value;
@@ -364,7 +336,7 @@ export default function Teacher(props) {
   const onEditorStateChange = useCallback(
     (rawcontent) => {
       setCheckEditorBox(true);
-      console.log(rawcontent);
+    
       setEditorState(rawcontent.blocks[0].text);
     },
     [editorState]
@@ -374,16 +346,9 @@ export default function Teacher(props) {
     setSuspended(!suspended);
   };
 
-  // const handleAvgOnChange = (e)=>{
-  //   var value = e.target.value
-  //   setAvgGrade(value)
-  //   // setCourseList(courseList => [...courseList,value] );
-
-  // }
-
   //convert file upload to base64
   const convertToBase64 = (file) => {
-    console.log(file, "djjddj");
+   
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(file);
@@ -395,33 +360,29 @@ export default function Teacher(props) {
       };
     });
 
-    // return btoa(file);
+
   };
 
   const fileSelectorHandler = async (e) => {
-    console.log(e.target.files[0]);
+
     const file = e.target.files[0];
     const base64 = await convertToBase64(file);
     setSelectedFile({ ...selectedFile, myFile: base64 });
 
-    console.log(selectedFile);
+
     setIsSelected(true);
   };
 
   const handleOnChange = useCallback(
     (e) => {
-      console.log(e.target.checked);
+    
       var value = e.target.value;
-      // var checkboxchecked = e.target.checked
+  
 
       //uncheck the checkbox
       setCheckState(false);
 
-      // setCourseList(cloneType2)
-
-      console.log(e.currentTarget);
-      console.log(value);
-      console.log(courseList);
+  
 
       let NewCourses;
       // e.target.checked = "false"
@@ -431,42 +392,22 @@ export default function Teacher(props) {
         NewCourses = collectCourseList.filter((a) => a !== value);
         setCollectCourseList(NewCourses);
         // setCourseList(NewCourses);
-        console.log("mik");
+     
       } else if (!e.target.checked) {
         //add unchecked course to collectcourselist, which later gets filtered out on button submission click
-        console.log("llllllll", courseList);
+       
         setCollectCourseList((collectCourseList) => [
           ...collectCourseList,
           value,
         ]);
-        console.log(collectCourseList);
+      
 
-        console.log("MEEE", value);
-
-        // NewCourses =  courseList.filter((a) => a !== value);
-        // setCourseList(NewCourses);
-        // var index = cloneType2.indexOf(value);
-        // if (index > -1) {
-        //   var update = delete cloneType2[index];
-        //   // cloneType2 = [update]
-        //   cloneType2.splice(index, 1);
-        // }
-        // console.log(cloneType2)
-        // return cloneType2;
-
-        // cloneType2[1] = value
-
-        // const clon =cloneType2.filter(a => {
-        //   console.log(a)
-        //   return a != value
-        // });
-        // console.log(cloneType2)
+  
       }
     },
     [cloneType2, collectCourseList]
   );
 
-  console.log(courseList);
 
   const config = {
     headers: {
@@ -477,15 +418,13 @@ export default function Teacher(props) {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    console.log(degree);
 
-    console.log(extraCourseList, "lllll");
 
     //filter to get the unchecked courselist (i.e wanted courses)
     let selectedCourse = cloneType2.filter(
       (e) => !collectCourseList.includes(e)
     );
-    console.log(selectedCourse, "mdddd");
+  
 
     if (startYear.length < 4) {
       setErrorType(false);
@@ -524,12 +463,8 @@ export default function Teacher(props) {
         })
         .then((response) => {
           setLoading(false);
-          console.log(response);
-          console.log(response.data[0].EmailAlreadyExist);
-          // var reply = response.data;
-          // var jsonData = JSON.parse(JSON.stringify(response));
-          // console.log(jsonData)
-          // console.log(typeof(jsonData.data))
+        
+     
           if (response.data[0].EmailAlreadyExist === "Email Already Exists") {
             setErrorType(false);
 
@@ -547,7 +482,7 @@ export default function Teacher(props) {
         .catch((error) => {
           setLoading(false);
           setErrorType(false);
-          console.log(error);
+      
           if (error.status === 401) {
             setErrorType(false);
             setIsOpen(true);
@@ -562,18 +497,16 @@ export default function Teacher(props) {
   };
 
   useEffect(() => {
-    console.log(majorfieldvalue);
-    console.log(courseList);
-    console.log(collectCourseList);
+
   }, [majorfieldvalue, collectCourseList, cloneType2, editorState]);
 
-  console.log(errorType);
+
   return (
     <div className="teacher">
       {/* {user.name}! */}
       Welcome Teacher: {user} {currentTeacher} <br />
       <br />
-      {console.log(user)}
+    
       <input
         type="button"
         className="removeBtn"
@@ -680,7 +613,7 @@ export default function Teacher(props) {
             value={majorfieldvalue}
             required
           >
-            {/* {console.log("fo", e)} */}
+         
             <option value="Science" key="1">
               Science
             </option>

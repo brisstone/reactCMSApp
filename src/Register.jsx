@@ -7,7 +7,6 @@ import { setUserSession } from './Utils/Common';
 export default function Register(props) {
 
 
-  // const baseUrl = 'http://localhost:8000'
   const baseUrl = 'https://pythocmsapi.herokuapp.com'
 
     const [loading, setLoading] = useState(false);
@@ -41,7 +40,7 @@ export default function Register(props) {
 
         }).catch(error => {
           setLoading(false);
-          console.log(error);
+      
           if (error.status === 401) setError(error.response.data.message);
           else setError("Something went wrong. Please try again later.");
           // error.push(error)
