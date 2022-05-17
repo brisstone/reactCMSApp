@@ -37,9 +37,7 @@ var SHA256 = require("crypto-js/sha256");
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
 
-
 export default function PersonalStudentForm(props) {
- 
   const baseUrl = Api;
 
   const user = getUser();
@@ -271,8 +269,6 @@ export default function PersonalStudentForm(props) {
     var value = e.target.value;
     setFullname(value);
   };
-
-
 
   const handlePasswordOnChange = async (e) => {
     var value = e.target.value;
@@ -535,29 +531,11 @@ export default function PersonalStudentForm(props) {
             readonly
             // readonly="readonly"
           />
-          {/* <input /> */}
         </div>
-        {/* <div>
-          <label className="parameter">Password</label>
-          <input
-            type="password"
-            placeholder="password"
-            onChange={handlePasswordOnChange}
-            required
-          />
-        </div> */}
+
         <div className="input-container">
           <label className="parameter">Date of birth</label>
           {student && student.DateOfBirth}
-          {/* <input
-            // type="date"
-            id="birthday"
-            name="birthday"
-            value={student && student.DateOfBirth}
-            onChange={handleDateofbirthOnChange}
-            required
-            readonly
-          /> */}
         </div>
         <div className="input-container">
           <label className="parameter">School Start Year</label>
@@ -584,44 +562,6 @@ export default function PersonalStudentForm(props) {
           />
         </div>
 
-        {/* <img src={atob(student && student.Picture)} /> */}
-
-        {/* <img
-          src={
-            student &&
-            `data:image/png;base64,${Buffer.from(
-              student.Picture,
-              "base64"
-            ).toString()}`
-          }
-        /> */}
-        {/* myImage.src = URL.createObjectURL(blob); */}
-        {/* <img src={atob("W29iamVjdCBGaWxlXQ")} /> */}
-        {/* <div className="input-container">
-          <fieldset
-            value={student && student.Degree}
-            // value="BSc"
-            onChange={handleRadioOnChange}
-            required
-            readonly
-          >
-            <legend className="parameter">Degree</legend>
-       
-            <label className="degreechk">
-              <input name="degree" type="radio" value="BA" />
-              BA
-            </label>
-            <label className="degreechk">
-              <input name="degree" type="radio" value="BSc" />
-              BSc
-            </label>
-            <label className="degreechk">
-              <input name="degree" type="radio" value="PHD" />
-              PHD
-            </label>
-          </fieldset>
-        </div> */}
-
         <div className="input-container">
           <label className="parameter">Major Field of Study:</label>
           <input
@@ -635,26 +575,6 @@ export default function PersonalStudentForm(props) {
           />
         </div>
 
-        {/* <div className="input-container">
-          <label className="parameter">Major Field of Study</label>
-          <select
-            onChange={majorFieldChangeHandler}
-            value={majorfieldvalue}
-            required
-          >
-       
-       
-            <option value="Science" key="1">
-              Science
-            </option>
-            <option value="Art" key="2">
-              Art
-            </option>
-            <option value="Commercial" key="3">
-              Commercial
-            </option>
-          </select>
-        </div> */}
         <div className="input-container">
           <label className="parameter">Minor Field of Study:</label>
           <input
@@ -667,17 +587,7 @@ export default function PersonalStudentForm(props) {
             readonly
           />
         </div>
-        {/* <div className="input-container">
-          <label className="parameter">Minor Field of Study</label>
-          <select
-            onChange={handleMinorfieldOnChange}
-            value={minorfieldvalue}
-            required
-          >
-            <option>select</option>
-            {options}
-          </select>
-        </div> */}
+
         <div className="showCourses">
           <div className="input-container">
             {/* <label className="parameter"> Course List</label> */}
@@ -687,31 +597,9 @@ export default function PersonalStudentForm(props) {
 
               {student && student.Courses.split(",").map((e) => <div>{e}</div>)}
             </div>
-            {/*             
-            {type2 ? (
-              type2.map((el) => (
-                <div key={el}>
-                  <label htmlFor={el}>
-                    {el}
-
-                    <input
-                      type="checkbox"
-                      defaultChecked={checkState}
-                      id="inline"
-                      name={el}
-                      value={el}
-                      onChange={handleOnChange}
-                    />
-                  </label>
-                </div>
-              ))
-            ) : (
-              <label>&nbsp;</label>
-            )} */}
           </div>
 
           <div>
-            {/* <label>Other</label> */}
             <div>
               <label> Other Courses</label>
             </div>
@@ -751,29 +639,12 @@ export default function PersonalStudentForm(props) {
                   >
                     Remove
                   </button>
-                  {/* <button value={e} onClick={handleAddExtracourse}>Add</button> */}
                 </div>
               ))}
             </div>
           </div>
         </div>
-        {/* <div className="input-container">
-          <label className="parameter">Image</label>
-          <input
-            type="file"
-            onChange={fileSelectorHandler}
-            readonly
-            // value={student && student.Picture}
-          />
-          {isSelected ? <p>Image selected</p> : <p>Image not yet selected</p>}
-        </div> */}
-        {/* <div className="input-container">
-           <label className="parameter" >Average Grade</label>
-           <label>
-                <input type="text" value={avgGrade} placeholder="average grade" onChange={handleAvgOnChange} required />
-             </label>
-          
-        </div> */}
+
         <div className="input-container">
           <label className="parameter">Suspended</label>
           <input
@@ -810,15 +681,6 @@ export default function PersonalStudentForm(props) {
           </div>
         </div>
 
-        {/* <div className="Editor">
-          <label>Teacher's REmark</label>
-          <Editor
-            // editorState={editorState}
-            value={student && student.Remark}
-            onChange={onEditorStateChange}
-            readonly
-          />
-        </div> */}
         <button className="primary" type="submit">
           Update
         </button>

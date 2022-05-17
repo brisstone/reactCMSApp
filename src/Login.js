@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { setUserSession } from './Utils/Common';
-import { GET_USER } from './redux/constants';
 import {Api} from './Utils/Api';
 
 
@@ -18,8 +17,6 @@ function Login(props) {
  
   
 
-  // http://localhost:4000/users/signin
-  // handle button click of login form
   var config = {
     headers: {
       'Content-Type': 'application/json'
@@ -34,15 +31,12 @@ function Login(props) {
 
   const handleLogin = async (dispatch) => {
 
-    // dispatch({
-    //   type: GET_USER,
-    //   payload: username
-    // });
+
     
     setError(null);
     setLoading(true);
     let isMounted = true; 
-      // "proxy": "https://pythocmsapi.herokuapp.com/",
+   
 
 
     await axios.post(`${baseUrl}/login`, { email: username.value, password: password.value }).then(response => {
